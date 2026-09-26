@@ -1,7 +1,7 @@
 # SlimFormer++
 
 3D medical image segmentation with window Mamba and augmented bottleneck mixing,
-built for nnU-Net v2. **Source only; pretrained weights are not yet available.**
+built for nnU-Net v2. **Source code and the ACDC best checkpoint are available.**
 
 ## Performance
 
@@ -44,6 +44,36 @@ python smoke_test.py --cuda
 **Already have nnUNetv2?** Use `requirements-model.txt` instead of
 `requirements.txt` to install the model dependencies. The installer registers
 the trainer in the active environment and refuses to overwrite a different copy.
+
+## ACDC best checkpoint
+
+Download the [ACDC best checkpoint](https://github.com/WHHHHHY822/SlimFormerPlusPlus/releases/tag/acdc-best-v1)
+after installing the trainer. The archive contains only the selected best
+network weights and the nnU-Net plans and dataset metadata needed for inference.
+It does not contain training images, labels, optimizer state or other checkpoints.
+
+```bash
+export nnUNet_results="/path/to/nnUNet_results"
+mkdir -p "$nnUNet_results"
+curl -fL -o SlimFormerPlusPlus_ACDC_best.zip \
+  https://github.com/WHHHHHY822/SlimFormerPlusPlus/releases/download/acdc-best-v1/SlimFormerPlusPlus_ACDC_best.zip
+unzip SlimFormerPlusPlus_ACDC_best.zip -d "$nnUNet_results"
+(cd "$nnUNet_results" && sha256sum -c SHA256SUMS)
+
+# Use ACDC test images with nnU-Net's naming convention and one MRI channel.
+nnUNetv2_predict -i /path/to/ACDC/imagesTs -o /path/to/ACDC/predictions \
+  -d 3 -c 3d_fullres -tr nnUNetTrainer_SlimFormerPlusPlus \
+  -f 0 -chk checkpoint_best.pth
+```
+
+This fold-0 model was trained for 1200 epochs with global batch 8. The best
+checkpoint was selected at epoch 254. Its foreground mean Dice on the original
+60-case validation fold was 0.916 using full sliding-window inference; this is
+not an independent test result. To reproduce that score, use the original ACDC
+dataset and the same fold split and preprocessing. The command above reproduces
+prediction with the released weights on appropriately prepared ACDC images.
+
+Future best-checkpoint releases: [AbdomenCT-1K and AMOS2022](docs/TODO.md).
 
 ## Train
 
