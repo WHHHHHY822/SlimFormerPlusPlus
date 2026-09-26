@@ -1,8 +1,7 @@
 # SlimFormer++
 
-SlimFormer++ is a 3D medical image segmentation model for nnU-Net v2. It combines
-window Mamba in the encoder with augmented mixing in the bottleneck. The
-[model and trainer](nnUNetTrainer_SlimFormerPlusPlus.py) are provided in one file.
+SlimFormer++ is a 3D medical image segmentation model for nnU-Net v2.
+The [model and trainer](nnUNetTrainer_SlimFormerPlusPlus.py) are provided in one file.
 
 ## Performance and efficiency
 
