@@ -1,0 +1,48 @@
+SlimFormer++ Noncommercial Research License 1.0
+
+Copyright (c) 2026 WHHHHHY822
+
+This license applies only to copyrightable original contributions in this
+repository whose rights are controlled by the SlimFormer++ copyright holders
+(the "Licensors"). Third-party material is excluded and remains under its
+original licenses. See NOTICE.md and licenses/Apache-2.0.txt.
+
+1. Permission
+Subject to these terms, any individual or organization may use, reproduce,
+modify, and redistribute the covered source code and modifications solely for
+noncommercial scientific research, including research evaluation,
+reproducibility studies, and publication of research findings.
+
+2. Noncommercial research only
+Commercial use is not permitted. Commercial use includes selling or licensing
+the covered code for consideration; using it in or to develop a commercial
+product or service; paid consulting or contract deliverables using the code;
+and using it in commercial operations or for commercial advantage. Research
+by a commercial organization is permitted only when the activity is
+noncommercial scientific research and does not serve those commercial uses.
+Other uses require separate written permission from the applicable Licensors.
+
+3. Redistribution
+Redistributions of covered code, with or without modifications, must include
+this license and all applicable copyright, attribution, and third-party
+notices. Modified files must be identified as modified. Recipients must receive
+the covered contributions under these same noncommercial research conditions.
+No rights granted independently under third-party licenses are restricted by
+this license. No ownership of research findings is claimed by this license.
+
+4. Reservation of rights
+Rights not expressly granted are reserved. No trademark rights are granted.
+This license does not grant permission for commercial use of trained models
+or other artifacts insofar as such permission would require rights in the
+covered contributions. It does not assert ownership of independently owned
+data, findings, or third-party material.
+
+5. Disclaimer
+THE COVERED MATERIAL IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE, AND NONINFRINGEMENT. TO THE EXTENT PERMITTED BY APPLICABLE LAW,
+THE LICENSORS ARE NOT LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY
+ARISING FROM USE OF THE MATERIAL.
+
+This is a source-available research license, not an OSI-approved open-source
+license.

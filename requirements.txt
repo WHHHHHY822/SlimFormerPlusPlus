@@ -1,0 +1,3 @@
+-r requirements-model.txt
+nnunetv2==2.6.2
+dynamic-network-architectures==0.4.1

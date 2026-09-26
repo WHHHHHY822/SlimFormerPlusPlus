@@ -1,0 +1,62 @@
+{
+  "python": "3.12.3",
+  "platform": "aarch64",
+  "versions": {
+    "torch": "2.6.0a0+df5bbc09d1.nv24.12",
+    "monai": "1.4.0",
+    "einops": "0.8.0",
+    "nnunetv2": "2.6.1",
+    "mamba-ssm": "2.2.2",
+    "causal-conv1d": "1.4.0",
+    "dynamic-network-architectures": "0.3.1",
+    "nnunet-mednext": "source checkout / not registered under this name"
+  },
+  "architecture": [
+    {
+      "dataset": "Dataset002_AbdomenCT1K",
+      "parameters": 6028053,
+      "first_stride": [
+        2,
+        2,
+        2
+      ],
+      "patch_size": [
+        96,
+        160,
+        160
+      ],
+      "strict_reference_load": true
+    },
+    {
+      "dataset": "Dataset004_AMOS",
+      "parameters": 6003136,
+      "first_stride": [
+        1,
+        2,
+        2
+      ],
+      "patch_size": [
+        64,
+        192,
+        160
+      ],
+      "strict_reference_load": true
+    },
+    {
+      "dataset": "Dataset003_ACDC",
+      "parameters": 6002740,
+      "first_stride": [
+        1,
+        2,
+        2
+      ],
+      "patch_size": [
+        20,
+        256,
+        224
+      ],
+      "strict_reference_load": true
+    }
+  ],
+  "cuda": "12.6"
+}
