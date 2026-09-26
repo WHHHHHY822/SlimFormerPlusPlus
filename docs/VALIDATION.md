@@ -51,10 +51,7 @@ modified by these checks. No weights are included.
 
 ## ACDC checkpoint release
 
-The ACDC `ep1200-b8` run completed 1200 epochs. Its selected best network
-weights (epoch 254) strictly load into the public SlimFormer++ model. A packaged
-inference-only copy preserves every weight tensor and loads through the official
-nnunetv2 2.6.2 predictor initialization on CPU. Full GPU inference from the
-packaged asset has not been run in this preparation environment. The reported
-0.916 foreground mean Dice is from 60 cases in the original fold-0 validation
-set, not an independent test set.
+The packaged ACDC best checkpoint preserves the selected network weights,
+strictly loads into the public SlimFormer++ model, and initializes through the
+official nnunetv2 2.6.2 predictor on CPU. GPU prediction of the packaged
+asset has not been run in this preparation environment.

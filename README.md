@@ -66,13 +66,6 @@ nnUNetv2_predict -i /path/to/ACDC/imagesTs -o /path/to/ACDC/predictions \
   -f 0 -chk checkpoint_best.pth
 ```
 
-This fold-0 model was trained for 1200 epochs with global batch 8. The best
-checkpoint was selected at epoch 254. Its foreground mean Dice on the original
-60-case validation fold was 0.916 using full sliding-window inference; this is
-not an independent test result. To reproduce that score, use the original ACDC
-dataset and the same fold split and preprocessing. The command above reproduces
-prediction with the released weights on appropriately prepared ACDC images.
-
 Future best-checkpoint releases: [AbdomenCT-1K and AMOS2022](docs/TODO.md).
 
 ## Train
