@@ -7,9 +7,8 @@ built for nnU-Net v2. **Source only; pretrained weights are not yet available.**
 
 ![Dice versus GFLOPs, with parameter counts and pruning comparisons](assets/performance_efficiency_pruning.png)
 
-In the comparison shown, SlimFormer++ achieves approximately **83.4% Dice**
-with **less than 200 GFLOPs**, offering the highest Dice and lowest FLOPs among
-the displayed methods.
+SlimFormer++ combines strong segmentation performance with low computational
+cost, achieving the highest Dice among the methods shown.
 
 ## Efficiency
 
