@@ -3,6 +3,22 @@
 3D medical image segmentation with window Mamba and augmented bottleneck mixing,
 built for nnU-Net v2. **Source only; pretrained weights are not yet available.**
 
+## Performance
+
+![Dice versus GFLOPs, with parameter counts and pruning comparisons](assets/performance_efficiency_pruning.png)
+
+In the comparison shown, SlimFormer++ achieves approximately **83.4% Dice**
+with **less than 200 GFLOPs**, offering the highest Dice and lowest FLOPs among
+the displayed methods.
+
+## Efficiency
+
+![Normalized comparison of parameters, FLOPs, peak memory, latency and energy](assets/efficiency_radar.png)
+
+The normalized comparison highlights the lowest parameter count, FLOPs and
+peak memory among the compared methods, together with near-best energy
+consumption and competitive latency. Farther outward indicates better efficiency.
+
 ## Code
 
 The complete model and trainer are in
