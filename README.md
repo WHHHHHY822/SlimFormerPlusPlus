@@ -37,24 +37,19 @@ If nnUNetv2 is already installed, use `requirements-model.txt` in place of
 | AbdomenCT-1K (`Dataset002_AbdomenCT1K`) | CT | [Download](https://github.com/WHHHHHY822/SlimFormerPlusPlus/releases/tag/abdomenct1k-best-v1) |
 | AMOS2022 (`Dataset004_AMOS`) | CT only | [Download](https://github.com/WHHHHHY822/SlimFormerPlusPlus/releases/tag/amos2022-ct-best-v1) |
 
-Install the trainer first, then download and extract the ZIP from the chosen
-release into `nnUNet_results`. For example, with the AMOS2022 CT checkpoint:
+Install the trainer, set `nnUNet_results`, then run inference with the
+matching input modality. The helper downloads the selected best checkpoint,
+verifies it and applies the packaged nnU-Net plans:
 
 ```bash
 export nnUNet_results="/path/to/nnUNet_results"
-mkdir -p "$nnUNet_results"
-curl -fL -o SlimFormerPlusPlus_AMOS2022_CT_best.zip \
-  https://github.com/WHHHHHY822/SlimFormerPlusPlus/releases/download/amos2022-ct-best-v1/SlimFormerPlusPlus_AMOS2022_CT_best.zip
-unzip SlimFormerPlusPlus_AMOS2022_CT_best.zip -d "$nnUNet_results"
-(cd "$nnUNet_results" && sha256sum -c SHA256SUMS)
-nnUNetv2_predict -i /path/to/AMOS_CT/imagesTs -o /path/to/predictions \
-  -d 4 -c 3d_fullres -tr nnUNetTrainer_SlimFormerPlusPlus \
-  -f 0 -chk checkpoint_best.pth
+bash predict.sh amos-ct /path/to/imagesTs /path/to/predictions
+# Replace amos-ct with acdc or abdomenct1k for the other checkpoints.
 ```
 
-For ACDC or AbdomenCT-1K, use its release ZIP and dataset ID (`3` or `2`).
-Input files must use the matching modality and nnU-Net naming convention
-(e.g. `case_0000.nii.gz`).
+Inputs must use nnU-Net naming (for example `case_0000.nii.gz`). See the
+[full inference configuration](docs/INFERENCE.md) for the archive layout,
+modalities and command arguments.
 
 ## Train on your data
 
