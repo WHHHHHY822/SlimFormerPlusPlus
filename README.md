@@ -29,25 +29,32 @@ python smoke_test.py --cuda
 If nnUNetv2 is already installed, use `requirements-model.txt` in place of
 `requirements.txt`. The installer adds the trainer to the active environment.
 
-## ACDC pretrained checkpoint
+## Pretrained checkpoints
 
-Download the [ACDC best checkpoint](https://github.com/WHHHHHY822/SlimFormerPlusPlus/releases/tag/acdc-best-v1)
-and extract it into `nnUNet_results`:
+| Dataset | Input | Best checkpoint |
+| --- | --- | --- |
+| ACDC (`Dataset003_ACDC`) | MRI | [Download](https://github.com/WHHHHHY822/SlimFormerPlusPlus/releases/tag/acdc-best-v1) |
+| AbdomenCT-1K (`Dataset002_AbdomenCT1K`) | CT | [Download](https://github.com/WHHHHHY822/SlimFormerPlusPlus/releases/tag/abdomenct1k-best-v1) |
+| AMOS2022 (`Dataset004_AMOS`) | CT only | [Download](https://github.com/WHHHHHY822/SlimFormerPlusPlus/releases/tag/amos2022-ct-best-v1) |
+
+Install the trainer first, then download and extract the ZIP from the chosen
+release into `nnUNet_results`. For example, with the AMOS2022 CT checkpoint:
 
 ```bash
 export nnUNet_results="/path/to/nnUNet_results"
 mkdir -p "$nnUNet_results"
-curl -fL -o SlimFormerPlusPlus_ACDC_best.zip \
-  https://github.com/WHHHHHY822/SlimFormerPlusPlus/releases/download/acdc-best-v1/SlimFormerPlusPlus_ACDC_best.zip
-unzip SlimFormerPlusPlus_ACDC_best.zip -d "$nnUNet_results"
+curl -fL -o SlimFormerPlusPlus_AMOS2022_CT_best.zip \
+  https://github.com/WHHHHHY822/SlimFormerPlusPlus/releases/download/amos2022-ct-best-v1/SlimFormerPlusPlus_AMOS2022_CT_best.zip
+unzip SlimFormerPlusPlus_AMOS2022_CT_best.zip -d "$nnUNet_results"
 (cd "$nnUNet_results" && sha256sum -c SHA256SUMS)
-nnUNetv2_predict -i /path/to/ACDC/imagesTs -o /path/to/predictions \
-  -d 3 -c 3d_fullres -tr nnUNetTrainer_SlimFormerPlusPlus \
+nnUNetv2_predict -i /path/to/AMOS_CT/imagesTs -o /path/to/predictions \
+  -d 4 -c 3d_fullres -tr nnUNetTrainer_SlimFormerPlusPlus \
   -f 0 -chk checkpoint_best.pth
 ```
 
-Input images must follow nnU-Net's naming and preprocessing conventions.
-Best checkpoints for [AbdomenCT-1K and AMOS2022](docs/TODO.md) are planned.
+For ACDC or AbdomenCT-1K, use its release ZIP and dataset ID (`3` or `2`).
+Input files must use the matching modality and nnU-Net naming convention
+(e.g. `case_0000.nii.gz`).
 
 ## Train on your data
 
