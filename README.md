@@ -16,9 +16,14 @@ competitive runtime among the methods shown.
 
 ## Installation
 
-Use Python 3.12 with a CUDA-enabled PyTorch installation. From this repository:
+Use Python 3.12. First install PyTorch **and** torchvision built for your CUDA
+driver (choose the matching `cu*` index on [pytorch.org](https://pytorch.org/get-started/previous-versions/)).
+Install both together: if torchvision is missing, the dependencies below pull
+the newest torchvision, and pip replaces your PyTorch with the version it needs.
+Then, from this repository:
 
 ```bash
+python -m pip install torch==2.6.0 torchvision==0.21.0 --index-url https://download.pytorch.org/whl/cu126
 python -m pip install setuptools wheel packaging ninja
 python -m pip install --no-build-isolation -r requirements.txt
 python -m pip check
@@ -26,8 +31,15 @@ python install.py
 python smoke_test.py --cuda
 ```
 
+`mamba-ssm` and `causal-conv1d` are installed from their release tags. Prebuilt
+wheels exist only for x86_64 with PyTorch 2.0–2.4; otherwise they compile from
+source, which needs the CUDA toolkit (`nvcc`) matching PyTorch's CUDA version
+and can take tens of minutes. Set `MAX_JOBS=4` if memory is limited.
+
 If nnUNetv2 is already installed, use `requirements-model.txt` in place of
 `requirements.txt`. The installer adds the trainer to the active environment.
+Tested with Python 3.12.3, PyTorch 2.6.0 (CUDA 12.6), torchvision 0.21.0 and
+nnUNetv2 2.6.2 on Linux aarch64 (NVIDIA GH200).
 
 ## Data and pretrained checkpoints
 
