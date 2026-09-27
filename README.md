@@ -29,13 +29,18 @@ python smoke_test.py --cuda
 If nnUNetv2 is already installed, use `requirements-model.txt` in place of
 `requirements.txt`. The installer adds the trainer to the active environment.
 
-## Pretrained checkpoints
+## Data and pretrained checkpoints
 
 | Dataset | Input | Best checkpoint |
 | --- | --- | --- |
 | ACDC (`Dataset003_ACDC`) | MRI | [Download](https://github.com/WHHHHHY822/SlimFormerPlusPlus/releases/tag/acdc-best-v1) |
 | AbdomenCT-1K (`Dataset002_AbdomenCT1K`) | CT | [Download](https://github.com/WHHHHHY822/SlimFormerPlusPlus/releases/tag/abdomenct1k-best-v1) |
 | AMOS2022 (`Dataset004_AMOS`) | CT only | [Download](https://github.com/WHHHHHY822/SlimFormerPlusPlus/releases/tag/amos2022-ct-best-v1) |
+
+Download the datasets from their official sources: [ACDC](https://www.creatis.insa-lyon.fr/Challenge/acdc/databases.html),
+[AbdomenCT-1K](https://github.com/JunMa11/AbdomenCT-1K), and
+[AMOS2022](https://zenodo.org/records/7262581). Follow the
+[data preparation guide](docs/DATASETS.md) to arrange images for inference.
 
 Install the trainer, set `nnUNet_results`, then run inference with the
 matching input modality. The helper downloads the selected best checkpoint,

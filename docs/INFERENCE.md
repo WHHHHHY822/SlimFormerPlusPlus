@@ -1,8 +1,10 @@
 # Checkpoint inference
 
 Install the dependencies and trainer from the [README](../README.md), then set
-`nnUNet_results` to a writable folder. Each release ZIP contains a standard
-nnU-Net model folder. For example, the AMOS2022 CT archive extracts to:
+`nnUNet_results` to a writable folder. For official downloads and image
+naming for each dataset, see the [data preparation guide](DATASETS.md).
+Each release ZIP contains a standard nnU-Net model folder. For example, the
+AMOS2022 CT archive extracts to:
 
 ```text
 nnUNet_results/
