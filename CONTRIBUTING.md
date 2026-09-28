@@ -9,13 +9,15 @@ README. Run the checks that apply to your change:
 ```bash
 # No model dependencies needed:
 python -m unittest discover -s tests -v
-python -m compileall -q install.py smoke_test.py nnUNetTrainer_SlimFormerPlusPlus.py tests
+python -m compileall -q install.py smoke_test.py nnUNetTrainer_SlimFormerPlusPlus.py \
+    nnUNetTrainer_SlimFormerPlusPlus_Attention.py tests
 
 # With model dependencies and an installed trainer:
 python install.py --check
 python smoke_test.py
 # Requires an available CUDA GPU:
 python smoke_test.py --cuda
+# For the attention variant, add --attention to the three commands above.
 ```
 
 If model code changed, `install.py` will refuse to overwrite a different

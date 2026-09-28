@@ -1,18 +1,23 @@
 """Check trainer discovery and model construction; optionally run CUDA backward."""
 import argparse
 import importlib
+import sys
 from pathlib import Path
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--cuda', action='store_true', help='Also check CUDA forward/backward')
+    parser.add_argument('--attention', action='store_true', help='Check the attention variant')
     args = parser.parse_args()
     import torch
     import nnunetv2
     from nnunetv2.utilities.find_class_by_name import recursive_find_python_class
-    name = 'nnUNetTrainer_SlimFormerPlusPlus'
+    name = 'nnUNetTrainer_SlimFormerPlusPlus' + ('_Attention' if args.attention else '')
     module = importlib.import_module('nnunetv2.training.nnUNetTrainer.' + name)
+    if args.attention:
+        assert 'mamba_ssm' not in sys.modules, 'The attention variant imported mamba_ssm'
+        print('PASS attention variant imports without mamba_ssm')
     trainer = recursive_find_python_class(
         str(Path(nnunetv2.__path__[0]) / 'training' / 'nnUNetTrainer'),
         name, 'nnunetv2.training.nnUNetTrainer')

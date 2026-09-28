@@ -7,6 +7,10 @@ AugmentedMixer is the project-owner-supplied R5 CapFree implementation.
 SelectiveMixer is the descriptive name for DenseWindowMamba with the same
 computation. Encoder2/3 retain MLP residuals but no token-mixer residuals.
 The release model file matches the currently inspected training source.
+The attention variant (`nnUNetTrainer_SlimFormerPlusPlus_Attention.py`) is a
+copy of that file in which SelectiveMixer is replaced by window self-attention
+using PyTorch's `scaled_dot_product_attention`; it uses neither Mamba nor
+causal-conv1d.
 
 The source checkout's Apache-2.0 license text, including its attribution to
 Division of Medical Image Computing, German Cancer Research Center (DKFZ),

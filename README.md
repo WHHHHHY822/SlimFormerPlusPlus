@@ -82,6 +82,27 @@ nnUNetv2_plan_and_preprocess -d 2 --verify_dataset_integrity
 nnUNetv2_train 2 3d_fullres 0 -tr nnUNetTrainer_SlimFormerPlusPlus
 ```
 
+## Attention variant
+
+[`nnUNetTrainer_SlimFormerPlusPlus_Attention`](nnUNetTrainer_SlimFormerPlusPlus_Attention.py)
+replaces the selective mixers in encoder 1 with window self-attention
+(3 heads, 8×8×8 windows). The rest of the network and the training schedule
+are unchanged. It does not need `mamba-ssm`, `causal-conv1d` or
+`transformers`, so no CUDA extension is compiled. No checkpoints are provided
+for this variant; the checkpoints above are for SlimFormer++.
+
+```bash
+python -m pip install torch==2.6.0 torchvision==0.21.0 --index-url https://download.pytorch.org/whl/cu126
+python -m pip install -r requirements-attention.txt
+python -m pip check
+python install.py --attention
+python smoke_test.py --attention --cuda
+```
+
+Train it as above with `-tr nnUNetTrainer_SlimFormerPlusPlus_Attention`. If
+the SlimFormer++ trainer is installed in the same environment, nnU-Net imports
+it while looking up trainers, so that environment still needs `mamba-ssm`.
+
 ## License
 
 Noncommercial research use only. See [LICENSE](LICENSE), [third-party

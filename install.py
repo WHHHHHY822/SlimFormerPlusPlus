@@ -6,6 +6,7 @@ import shutil
 import sys
 
 FILENAME = 'nnUNetTrainer_SlimFormerPlusPlus.py'
+ATTENTION_FILENAME = 'nnUNetTrainer_SlimFormerPlusPlus_Attention.py'
 
 
 def install(source, destination):
@@ -26,6 +27,8 @@ def install(source, destination):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true', help='Check destination without writing')
+    parser.add_argument('--attention', action='store_true',
+                        help='Use the attention variant, which does not need mamba-ssm')
     args = parser.parse_args()
     spec = importlib.util.find_spec('nnunetv2')
     if spec is None or not spec.submodule_search_locations:
@@ -34,12 +37,14 @@ def main():
     roots = [p for p in roots if p.is_dir()]
     if len(roots) != 1:
         parser.exit(1, 'Cannot identify a unique nnU-Net trainer directory. Check your environment.\n')
-    source = Path(__file__).resolve().with_name(FILENAME)
-    destination = roots[0] / FILENAME
+    filename = ATTENTION_FILENAME if args.attention else FILENAME
+    source = Path(__file__).resolve().with_name(filename)
+    destination = roots[0] / filename
     print(f'Python: {sys.executable}\nTrainer: {destination}')
     if args.check:
         if not destination.is_file() or destination.read_bytes() != source.read_bytes():
-            parser.exit(1, 'This release is not installed. Run python install.py.\n')
+            command = 'python install.py' + (' --attention' if args.attention else '')
+            parser.exit(1, f'This release is not installed. Run {command}.\n')
         print('Installed source matches this release.')
         return
     try:

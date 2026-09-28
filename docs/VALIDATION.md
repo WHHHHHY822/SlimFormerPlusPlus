@@ -55,3 +55,24 @@ The packaged ACDC best checkpoint preserves the selected network weights,
 strictly loads into the public SlimFormer++ model, and initializes through the
 official nnunetv2 2.6.2 predictor on CPU. GPU prediction of the packaged
 asset has not been run in this preparation environment.
+
+## Attention variant
+
+Date: 2026-09-28. `nnUNetTrainer_SlimFormerPlusPlus_Attention.py` is a copy of
+the released model file with the two encoder-1 `SelectiveMixer` modules replaced
+by `WindowSelfAttention`. The released SlimFormer++ file is unchanged.
+
+- Structure: for the ACDC, AbdomenCT-1K and AMOS2022 plans, all 178 tensors
+  outside the encoder-1 token mixers have the same names and shapes as in
+  SlimFormer++. With the released best checkpoints loaded into those tensors
+  and the encoder-1 token-mixer residual scale set to zero in both models, the
+  two models give bitwise-identical outputs on a random patch (CUDA, FP32).
+- A fresh Python 3.12 virtual environment on Linux aarch64 (NVIDIA GH200)
+  ran the README attention installation block verbatim: torch 2.6.0+cu126,
+  torchvision 0.21.0, nnunetv2 2.6.2, `pip check` clean, `install.py
+  --attention`, and `smoke_test.py --attention --cuda` passed.
+  `mamba_ssm`, `causal_conv1d` and `transformers` were not installed.
+- Official nnunetv2 2.6.2 trained the attention trainer on ACDC fold 0 for
+  24 epochs on one GPU (plans batch 4) without errors; the run was then
+  stopped. This checks that training runs, not final accuracy.
+- No checkpoint of this variant has been trained to completion or released.
