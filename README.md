@@ -6,8 +6,8 @@ The model and trainer are in [one file](nnUNetTrainer_SlimFormerPlusPlus.py).
 ## Performance and efficiency
 
 <p align="center">
-  <img src="assets/performance_efficiency_pruning.png" alt="Segmentation performance versus computational cost" width="49%" />
-  <img src="assets/efficiency_radar.png" alt="Normalized efficiency comparison" width="49%" />
+  <img src="assets/performance_efficiency_pruning.png" alt="Segmentation performance versus computational cost" width="53%" />
+  <img src="assets/efficiency_radar.png" alt="Normalized efficiency comparison" width="44%" />
 </p>
 
 Left: segmentation performance versus computational cost. Right: normalized
