@@ -11,6 +11,6 @@ jobs:
         with:
           python-version: '3.12'
       - name: Compile source
-        run: python -m compileall -q nnUNetTrainer_SlimFormerPlusPlus.py nnUNetTrainer_SlimFormerPlusPlus_Attention.py install.py smoke_test.py tests
+        run: python -m compileall -q nnUNetTrainer_SlimFormerPlusPlus.py nnUNetTrainer_SlimFormerPlusPlus_Attention.py install.py check_environment.py smoke_test.py tests
       - name: Test safe installer
         run: python -m unittest discover -s tests -v

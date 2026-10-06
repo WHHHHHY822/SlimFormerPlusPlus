@@ -1,6 +1,8 @@
 # Attention variant: no mamba-ssm, causal-conv1d or transformers.
-# Install CUDA-compatible PyTorch and torchvision first (see README).
-torch>=2.2
+# Install CUDA PyTorch first (see README).
+-c constraints.txt
+torch==2.6.0
+torchvision==0.21.0
 einops==0.8.0
 monai==1.4.0
 mednextv1 @ git+https://github.com/MIC-DKFZ/MedNeXt.git@0b78ed869fbd1cc2fd38754d2f8519f1b72d43ba

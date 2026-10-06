@@ -1,78 +1,95 @@
-# Release preparation validation
+# Validation
 
-Date: 2026-09-26.
+## Original model: fresh installation and CUDA execution
 
-## Completed
+Validated on 2026-10-06 in a new Python virtual environment without system
+site packages. Model code and checkpoint parameter names were unchanged.
 
-- The released model/trainer file is byte-identical to the inspected active
-  training checkout. SHA256:
-  `ecb4ff6bc99d724248e8215a0c435e8e30cca4e96a122588317ed11a13bb1245`.
-- All Python files parse, `runtime.json` parses, and README Bash examples pass
-  `bash -n`.
-- Installer test passes: first install, identical repeat, and refusal to
-  overwrite a different trainer while preserving its contents.
-- In the original training container, installed-source checking, trainer
-  discovery, and construction for first strides `(2, 2, 2)` and `(1, 2, 2)`
-  pass. The container emitted dependency deprecation warnings and a teardown
-  warning/bus-error message after the Python checks; no GPU was available.
-- Official nnunetv2 2.6.2 was downloaded from PyPI into an isolated temporary
-  package directory. Installation of this release's trainer, installed-source
-  comparison, nnU-Net class discovery, and model construction passed there.
-  The check also passed with official dynamic-network-architectures 0.4.1
-  installed in that temporary directory. Other container dependencies were reused; this was not a clean full
-  dependency installation. See below for remaining checks.
-- For synthetic model settings (one input channel, four output channels,
-  level0 kernel 3), parameter counts were 6,028,020 for stride `(2, 2, 2)` and
-  6,021,748 for `(1, 2, 2)`. These are not the dataset-specific counts recorded
-  in `runtime.json`.
+| Component | Tested value |
+| --- | --- |
+| Platform / GPU | Linux aarch64 / NVIDIA GH200 120GB |
+| Python | 3.12.3 |
+| pip / setuptools | 24.0 / 78.1.0 |
+| PyTorch / torchvision | Official 2.6.0+cu126 / 0.21.0 |
+| CUDA Toolkit / driver | 12.6.85 / 565.57.01 |
+| Host compiler | GCC 13.2.0 |
+| nnU-Net / dynamic-network-architectures | 2.6.2 / 0.4.1 |
+| Mamba / causal-conv1d | 2.2.2 / 1.4.0, built from complete GitHub sources |
+| Transformers / C++11 ABI | 4.46.3 / TRUE |
 
-## Dependency correction
+Passed:
 
-The local training checkout identifies as nnunetv2 2.6.1, but that version is
-not published on PyPI. New installations therefore target official 2.6.2.
-Its metadata requires dynamic-network-architectures >=0.4.1,<0.5, so the new
-installation file pins 0.4.1. Historical runtime records retain 0.3.1 and the
-local nnU-Net version rather than pretending the experiment used this new stack.
+- Fresh dependency installation with `--no-build-isolation` and `MAX_JOBS=4`,
+  repeated with the current pinned source commits and dependency constraints.
+  Installing the remaining requirements took approximately 8–12 minutes.
+- `python -m pip check`: no broken requirements.
+- Trainer installation and nnU-Net class discovery.
+- CUDA forward/backward for first strides `(2,2,2)` and `(1,2,2)`, with
+  FP16 autocast, expected output dimensions, finite loss, and finite gradients
+  for every trainable parameter.
+- Imports of the compiled selective-scan and causal-conv1d extensions.
+- Preflight checks for the valid environment and early rejection of missing
+  CUDA Toolkit, mismatched Toolkit versions, and bundled torch library conflicts.
 
-## Remaining checks
+The installation needed two NVIDIA-container environment corrections:
+disabling an unavailable preset package index and removing the image's old
+torch library paths from `LD_LIBRARY_PATH`. These are documented in
+[INSTALLATION.md](INSTALLATION.md). PyPI source-build failures were also
+reproduced for both pinned extension versions: their archives omitted `csrc`.
 
-- Complete fresh installation of all dependencies on the intended CUDA system
-  and `python -m pip check`.
-- `python smoke_test.py --cuda` for forward/backward execution and finite
-  gradients. The current preparation node has no available CUDA GPU.
-- A dataset-specific training/prediction integration run on official nnU-Net,
-  including multiple GPUs when used. Construction checks do not establish
-  training equivalence between the local checkout and official nnU-Net.
-- Existing `runtime.json` reference-comparison results are historical; they
-  were not regenerated in this preparation.
+[constraints.txt](../constraints.txt) records the tested dependency snapshot.
+Triton is constrained separately on aarch64 because PyTorch's dependency
+metadata differs between aarch64 and x86_64.
 
-No running training job, training source file, dataset, or checkpoint was
-modified by these checks. No weights are included.
+## Model and checkpoint checks
 
-## ACDC checkpoint release
+The released original model/trainer matches the inspected training source.
+SHA256:
+`ecb4ff6bc99d724248e8215a0c435e8e30cca4e96a122588317ed11a13bb1245`.
 
-The packaged ACDC best checkpoint preserves the selected network weights,
-strictly loads into the public SlimFormer++ model, and initializes through the
-official nnunetv2 2.6.2 predictor on CPU. GPU prediction of the packaged
-asset has not been run in this preparation environment.
+For synthetic one-input-channel/four-output-channel models with level0 kernel
+3, parameter counts are 6,028,020 for stride `(2,2,2)` and 6,021,748 for
+`(1,2,2)`. Dataset-specific settings are recorded in
+[runtime.json](../runtime.json).
+
+The packaged ACDC best checkpoint strictly loads into the public model and
+initializes through the official nnunetv2 2.6.2 predictor on CPU. Earlier
+reference comparisons in `runtime.json` are historical records, not results
+of the new installation check.
+
+The original training checkout identifies as nnunetv2 2.6.1 with
+dynamic-network-architectures 0.3.1 and NVIDIA's PyTorch 2.6 prerelease.
+The public installation uses official nnunetv2 2.6.2 and
+dynamic-network-architectures 0.4.1. `runtime.json` preserves the original
+versions; it is not an installation lock file.
 
 ## Attention variant
 
-Date: 2026-09-28. `nnUNetTrainer_SlimFormerPlusPlus_Attention.py` is a copy of
-the released model file with the two encoder-1 `SelectiveMixer` modules replaced
-by `WindowSelfAttention`. The released SlimFormer++ file is unchanged.
+Fresh installation and CUDA checks were repeated on 2026-10-06 with the
+current constraints, official PyTorch 2.6.0+cu126, torchvision 0.21.0 and
+nnunetv2 2.6.2 in a separate Python 3.12 environment on GH200:
 
-- Structure: for the ACDC, AbdomenCT-1K and AMOS2022 plans, all 178 tensors
-  outside the encoder-1 token mixers have the same names and shapes as in
-  SlimFormer++. With the released best checkpoints loaded into those tensors
-  and the encoder-1 token-mixer residual scale set to zero in both models, the
-  two models give bitwise-identical outputs on a random patch (CUDA, FP32).
-- A fresh Python 3.12 virtual environment on Linux aarch64 (NVIDIA GH200)
-  ran the README attention installation block verbatim: torch 2.6.0+cu126,
-  torchvision 0.21.0, nnunetv2 2.6.2, `pip check` clean, `install.py
-  --attention`, and `smoke_test.py --attention --cuda` passed.
-  `mamba_ssm`, `causal_conv1d` and `transformers` were not installed.
-- Official nnunetv2 2.6.2 trained the attention trainer on ACDC fold 0 for
-  24 epochs on one GPU (plans batch 4) without errors; the run was then
-  stopped. This checks that training runs, not final accuracy.
-- No checkpoint of this variant has been trained to completion or released.
+- Installation, `pip check`, trainer discovery and CUDA forward/backward passed.
+- Mamba, causal-conv1d and Transformers were absent.
+
+Earlier checks on 2026-09-28:
+
+- ACDC fold 0 training ran for 24 epochs on one GPU without errors.
+- The 178 tensors outside the encoder-1 token mixers retain the original
+  names and shapes. With mixer residual scales set to zero and identical
+  loaded weights, both models produced bitwise-identical CUDA FP32 outputs
+  on a random patch.
+
+No completed-training checkpoint of this variant has been released.
+
+## Scope
+
+These checks establish installation and execution on the tested system.
+They do not establish final segmentation accuracy, efficiency measurements,
+dataset-level GPU prediction, full training equivalence with the original
+checkout, or multi-GPU equivalence. Linux x86_64 has not been validated here.
+Reproducing experiment metrics requires the original data splits, plans,
+batch sizes and evaluation protocol in addition to the model.
+
+Source CI checks Python syntax and safe trainer installation. It does not run
+CUDA builds, training or inference.

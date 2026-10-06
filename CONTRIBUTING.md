@@ -9,10 +9,11 @@ README. Run the checks that apply to your change:
 ```bash
 # No model dependencies needed:
 python -m unittest discover -s tests -v
-python -m compileall -q install.py smoke_test.py nnUNetTrainer_SlimFormerPlusPlus.py \
+python -m compileall -q install.py check_environment.py smoke_test.py nnUNetTrainer_SlimFormerPlusPlus.py \
     nnUNetTrainer_SlimFormerPlusPlus_Attention.py tests
 
 # With model dependencies and an installed trainer:
+python check_environment.py
 python install.py --check
 python smoke_test.py
 # Requires an available CUDA GPU:

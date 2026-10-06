@@ -15,28 +15,37 @@ comparison of model size, memory use and runtime.
 
 ## Installation
 
-Python 3.12. Install PyTorch and torchvision together first, from the `cu*`
-index that matches your CUDA driver ([versions](https://pytorch.org/get-started/previous-versions/)).
-If torchvision is missing, pip pulls the latest one and replaces your PyTorch.
+Use **Linux, an NVIDIA GPU, Python 3.12, CUDA Toolkit 12.6 (`nvcc`),
+Git and a C++ compiler**. The reference profile uses PyTorch 2.6.0 and
+torchvision 0.21.0. Mamba and causal-conv1d compile from complete, pinned
+GitHub sources; allow 10–20 minutes for compilation.
+
+Use a fresh environment. For NVIDIA containers, other platforms or installation
+errors, see the [installation guide](docs/INSTALLATION.md).
+RTX 3090/4090 compatibility is expected but untested; RTX 5090/Blackwell
+requires a separate environment and is outside this reference profile.
 
 ```bash
-python -m pip install torch==2.6.0 torchvision==0.21.0 --index-url https://download.pytorch.org/whl/cu126
-python -m pip install setuptools wheel packaging ninja
-python -m pip install --no-build-isolation -r requirements.txt
+git clone https://github.com/WHHHHHY822/SlimFormerPlusPlus.git
+cd SlimFormerPlusPlus
+python3.12 -m venv .venv
+source .venv/bin/activate
+
+python -m pip install -c constraints.txt torch==2.6.0 torchvision==0.21.0 --index-url https://download.pytorch.org/whl/cu126
+python -m pip install -c constraints.txt pip setuptools wheel packaging ninja
+python check_environment.py --cuda
+MAX_JOBS=4 python -m pip install --no-build-isolation -r requirements.txt
 python -m pip check
 python install.py
 python smoke_test.py --cuda
 ```
 
-`mamba-ssm` and `causal-conv1d` are installed from their release tags. Prebuilt
-wheels exist only for x86_64 with PyTorch 2.0–2.4; elsewhere they are compiled
-from source, which needs `nvcc` matching PyTorch's CUDA version and can take
-tens of minutes. Set `MAX_JOBS=4` if memory is limited.
+Validated on Linux aarch64 / NVIDIA GH200: fresh dependency installation,
+`pip check`, trainer discovery, and CUDA forward/backward all passed.
+[Validation details and limits](docs/VALIDATION.md).
 
-If nnUNetv2 is already installed, use `requirements-model.txt` instead of
-`requirements.txt`. `install.py` copies the trainer into the active nnU-Net
-installation. Tested with Python 3.12.3, PyTorch 2.6.0 (CUDA 12.6),
-torchvision 0.21.0 and nnUNetv2 2.6.2 on Linux aarch64 (NVIDIA GH200).
+`install.py` registers the trainer in the active nnU-Net installation.
+For an existing nnU-Net environment, see the installation guide.
 
 ## Data and pretrained checkpoints
 
@@ -76,6 +85,10 @@ nnUNetv2_plan_and_preprocess -d 2 --verify_dataset_integrity
 nnUNetv2_train 2 3d_fullres 0 -tr nnUNetTrainer_SlimFormerPlusPlus
 ```
 
+This trains on your data. Reproducing an experiment's metrics also requires
+the same dataset split, plans, batch size and evaluation settings; the CUDA
+smoke test checks execution, not final accuracy.
+
 ## Attention variant
 
 [`nnUNetTrainer_SlimFormerPlusPlus_Attention`](nnUNetTrainer_SlimFormerPlusPlus_Attention.py)
@@ -84,8 +97,11 @@ mixer in encoder 1. Everything else is the same. It does not need `mamba-ssm`,
 `causal-conv1d` or `transformers`. There are no pretrained checkpoints for it.
 
 ```bash
-python -m pip install torch==2.6.0 torchvision==0.21.0 --index-url https://download.pytorch.org/whl/cu126
-python -m pip install -r requirements-attention.txt
+# In a fresh Python 3.12 environment:
+python -m pip install -c constraints.txt torch==2.6.0 torchvision==0.21.0 --index-url https://download.pytorch.org/whl/cu126
+python -m pip install -c constraints.txt pip setuptools wheel packaging ninja
+python check_environment.py --attention --cuda
+python -m pip install --no-build-isolation -r requirements-attention.txt
 python -m pip check
 python install.py --attention
 python smoke_test.py --attention --cuda

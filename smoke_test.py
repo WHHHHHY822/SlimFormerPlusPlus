@@ -12,6 +12,10 @@ def main():
     args = parser.parse_args()
     import torch
     import nnunetv2
+    if not args.attention:
+        for extension in ('selective_scan_cuda', 'causal_conv1d_cuda'):
+            importlib.import_module(extension)
+        print('PASS Mamba and causal-conv1d CUDA extensions import')
     from nnunetv2.utilities.find_class_by_name import recursive_find_python_class
     name = 'nnUNetTrainer_SlimFormerPlusPlus' + ('_Attention' if args.attention else '')
     module = importlib.import_module('nnunetv2.training.nnUNetTrainer.' + name)

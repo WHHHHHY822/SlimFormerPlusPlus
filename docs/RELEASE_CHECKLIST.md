@@ -1,6 +1,6 @@
 # Source release checklist
 
-Prepared: 2026-09-26.
+Updated: 2026-10-06.
 
 ## Completed
 
@@ -14,13 +14,14 @@ Prepared: 2026-09-26.
 - Trainer installer, smoke-check entry point, installer tests and GitHub CI
   are included.
 - The concise English README covers installation, training and prediction.
-- Installation and construction checks with official nnunetv2 2.6.2 passed;
+- Fresh dependency installation, trainer discovery and CUDA forward/backward
+  with official nnunetv2 2.6.2 passed on GH200;
   see [VALIDATION.md](VALIDATION.md) for the precise scope and limitations.
 
 ## Remaining validation
 
-- Full fresh dependency installation on the target CUDA platform.
-- GPU forward/backward and dataset-specific training/prediction validation.
+- Linux x86_64 installation and GPU execution.
+- Dataset-specific training/prediction, final metrics and multi-GPU equivalence.
 - Weight export, evaluation and checksums before any future weight release.
 
 Publication workflow: [PUBLISHING.md](PUBLISHING.md).

@@ -1,10 +1,12 @@
-# Install CUDA-compatible PyTorch and torchvision first (see README). These are the recorded model dependencies.
-torch>=2.2
+# Reference installation profile; install CUDA PyTorch first (see README).
+-c constraints.txt
+torch==2.6.0
+torchvision==0.21.0
 einops==0.8.0
 monai==1.4.0
-# The PyPI source archives of these two releases contain no CUDA sources.
-mamba-ssm @ git+https://github.com/state-spaces/mamba.git@v2.2.2
-causal-conv1d @ git+https://github.com/Dao-AILab/causal-conv1d.git@v1.4.0
+# Mamba 2.2.2 / causal-conv1d 1.4.0: complete CUDA sources, immutable revisions.
+mamba-ssm @ git+https://github.com/state-spaces/mamba.git@8ffd905c91d207f5c0cc84fc2a2fb748655094f0
+causal-conv1d @ git+https://github.com/Dao-AILab/causal-conv1d.git@f8c246707eff3431b5cf2ce6defa4b7f309ea9fb
 # mamba-ssm 2.2.2 imports generation classes that transformers 5 removed.
 transformers==4.46.3
 mednextv1 @ git+https://github.com/MIC-DKFZ/MedNeXt.git@0b78ed869fbd1cc2fd38754d2f8519f1b72d43ba
