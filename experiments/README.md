@@ -18,7 +18,7 @@ ACDC has 120 training and 30 validation patients, with no patient overlap.
 
 ## Evaluate a checkpoint
 
-Follow the repository installation instructions first. Obtain the data through
+Follow the [installation guide](../docs/INSTALLATION.md) first. Obtain the data through
 the [official sources](../docs/DATASETS.md); images and labels are not redistributed.
 Point the command at your images and matching reference labels:
 

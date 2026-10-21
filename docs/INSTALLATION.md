@@ -1,7 +1,7 @@
 # Installation
 
-The [README](../README.md#installation) installs the original SlimFormer++
-model. Use its reference profile before adapting package versions.
+Use Linux, an NVIDIA GPU, Git and a C++ compiler with the reference profile below.
+Start in a fresh environment. Source compilation usually takes 10–20 minutes.
 
 | Component | Reference profile |
 | --- | --- |
@@ -15,6 +15,46 @@ model. Use its reference profile before adapting package versions.
 Linux x86_64 follows the same source-build procedure but has not been validated
 in this release. Use Linux through WSL2 on Windows. macOS and CPU-only execution
 are outside the original model's reference profile.
+
+## Install SlimFormer++
+
+```bash
+git clone https://github.com/WHHHHHY822/SlimFormerPlusPlus.git
+cd SlimFormerPlusPlus
+python3.12 -m venv .venv
+source .venv/bin/activate
+
+python -m pip install -c constraints.txt torch==2.6.0 torchvision==0.21.0 --index-url https://download.pytorch.org/whl/cu126
+python -m pip install -c constraints.txt pip setuptools wheel packaging ninja
+python check_environment.py --cuda
+MAX_JOBS=4 python -m pip install --no-build-isolation -r requirements.txt
+python -m pip check
+python install.py
+python smoke_test.py --cuda
+```
+
+`install.py` registers the trainer in the active nnU-Net environment. Next:
+[predict or train](USAGE.md), or [reproduce the released results](../experiments/README.md).
+
+## Attention variant
+
+The [attention trainer](../nnUNetTrainer_SlimFormerPlusPlus_Attention.py) replaces
+encoder-1 selective mixing with 3-head self-attention in 8×8×8 windows.
+It needs neither Mamba, causal-conv1d nor Transformers. No pretrained checkpoint
+is available for this variant.
+
+In a separate Python 3.12 environment, install PyTorch and build tools with the
+first two `pip install` commands above, then run:
+
+```bash
+python check_environment.py --attention --cuda
+python -m pip install --no-build-isolation -r requirements-attention.txt
+python -m pip check
+python install.py --attention
+python smoke_test.py --attention --cuda
+```
+
+For training, use `-tr nnUNetTrainer_SlimFormerPlusPlus_Attention`.
 
 ## GPU compatibility
 
@@ -42,7 +82,7 @@ reproduction of published metrics.
 - Install a CUDA-capable NVIDIA driver, Git, Python 3.12, a C++ compiler and
   CUDA Toolkit 12.6. A working `nvidia-smi` or CUDA PyTorch installation does
   not provide the `nvcc` compiler.
-- Install PyTorch and torchvision together using the README versions and
+- Install PyTorch and torchvision together using the versions above and
   CUDA wheel index. Install them before building Mamba.
 - `constraints.txt` records the dependency versions from the validated
   installation. Requirements pin the CUDA extensions to immutable commits
@@ -69,7 +109,7 @@ Some NVIDIA images prepend their bundled PyTorch libraries to
 then mix new Python files with old shared libraries, producing an `XCCL`
 attribute error or an undefined-symbol error. In the shell used for the
 **new virtual environment**, remove the bundled torch library paths before
-following the README:
+following the installation commands above:
 
 ```bash
 export LD_LIBRARY_PATH="$(python -c 'import os; print(":".join(p for p in os.environ.get("LD_LIBRARY_PATH", "").split(":") if "/torch/lib" not in p))')"

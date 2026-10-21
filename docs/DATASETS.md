@@ -1,6 +1,9 @@
 # Dataset download and inference preparation
 
-These steps prepare original NIfTI images for the [released checkpoints](../README.md#data-and-pretrained-checkpoints). Keep each dataset's images in a separate `imagesTs` directory. No labels or manual resampling are needed for prediction: nnU-Net applies the preprocessing in the packaged plans. Follow each dataset's own access and use terms.
+These steps prepare NIfTI images for [checkpoint prediction](USAGE.md#predict-with-a-released-checkpoint).
+Keep each dataset in its own `imagesTs` directory. Labels and manual resampling
+are unnecessary for prediction. Follow each dataset's access and use terms.
+For evaluation with reference labels, see the [reproduction guide](../experiments/README.md).
 
 ## ACDC (MRI)
 
@@ -15,7 +18,6 @@ find "$SOURCE" -type f -name 'patient*_frame*.nii.gz' ! -name '*_gt.nii.gz' ! -n
     name=$(basename "$image" .nii.gz)
     cp "$image" "$DEST/${name}_0000.nii.gz"
   done
-bash predict.sh acdc "$DEST" /path/to/ACDC_predictions
 ```
 
 ## AbdomenCT-1K (CT)
@@ -27,7 +29,6 @@ SOURCE=/path/to/extracted/AbdomenCT-1K
 DEST=/path/to/AbdomenCT1K_imagesTs
 mkdir -p "$DEST"
 find "$SOURCE" -type f -path '*/AbdomenCT-1K-ImagePart*/*' -name 'Case_*_0000.nii.gz' -exec cp -t "$DEST" {} +
-bash predict.sh abdomenct1k "$DEST" /path/to/AbdomenCT1K_predictions
 ```
 
 Point `SOURCE` at the parent directory containing `AbdomenCT-1K-ImagePart1`, `AbdomenCT-1K-ImagePart2`, and `AbdomenCT-1K-ImagePart3` (adjust the folder pattern if your extracted archive differs).
@@ -45,7 +46,7 @@ for image in "$CT_SOURCE"/amos_*.nii.gz; do
   name=$(basename "$image" .nii.gz)
   cp "$image" "$DEST/${name}_0000.nii.gz"
 done
-bash predict.sh amos-ct "$DEST" /path/to/AMOS_CT_predictions
 ```
 
-Run these commands from the repository root after [installation](../README.md#installation) and setting `nnUNet_results`. Each `imagesTs` directory should contain at least one image. The expected input layout follows [nnU-Net's dataset format](https://github.com/MIC-DKFZ/nnUNet/blob/master/documentation/dataset_format.md); see the [inference guide](INFERENCE.md) for model configuration.
+Run these commands from the repository root. Once images are arranged, follow
+the [prediction command](USAGE.md#predict-with-a-released-checkpoint).

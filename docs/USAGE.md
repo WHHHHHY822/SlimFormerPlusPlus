@@ -1,8 +1,11 @@
-# Checkpoint inference
+# Predict and train
 
-Install the dependencies and trainer from the [README](../README.md), then set
+Follow the [installation guide](INSTALLATION.md), then set
 `nnUNet_results` to a writable folder. For official downloads and image
 naming for each dataset, see the [data preparation guide](DATASETS.md).
+
+## Predict with a released checkpoint
+
 Each release ZIP contains a standard nnU-Net model folder. For example, the
 AMOS2022 CT archive extracts to:
 
@@ -45,3 +48,20 @@ remove or relocate that directory before running the helper again. Use an empty
 of the same dataset and trainer name. Output images are written to the requested
 output directory. The input images and output directory are never included in
 the downloaded release.
+
+## Train on your data
+
+Arrange your data in nnU-Net format and replace `2` with its dataset ID:
+
+```bash
+export nnUNet_raw=/path/to/nnUNet_raw
+export nnUNet_preprocessed=/path/to/nnUNet_preprocessed
+export nnUNet_results=/path/to/nnUNet_results
+export nnUNet_compile=false
+nnUNetv2_plan_and_preprocess -d 2 --verify_dataset_integrity
+nnUNetv2_train 2 3d_fullres 0 -tr nnUNetTrainer_SlimFormerPlusPlus
+```
+
+For the attention variant, use `-tr nnUNetTrainer_SlimFormerPlusPlus_Attention`.
+To reproduce the published datasets with their original plans, splits and batch
+size, follow the [reproduction guide](../experiments/README.md).

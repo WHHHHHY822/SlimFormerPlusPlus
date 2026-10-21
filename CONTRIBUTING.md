@@ -3,8 +3,8 @@
 Please discuss architecture or training-behavior changes in an issue before
 opening a pull request. Include the motivation and the affected configurations.
 
-Use a dedicated environment and follow the installation instructions in the
-README. Run the checks that apply to your change:
+Use a dedicated environment and follow the [installation guide](docs/INSTALLATION.md).
+Run the checks that apply to your change:
 
 ```bash
 # No model dependencies needed:
