@@ -62,4 +62,4 @@ for required in plans.json dataset.json fold_0/checkpoint_best.pth; do
 done
 export nnUNet_compile="${nnUNet_compile:-false}"
 nnUNetv2_predict -i "$input_dir" -o "$output_dir" -d "$id" -c 3d_fullres \
-    -tr nnUNetTrainer_SlimFormerPlusPlus -f 0 -chk checkpoint_best.pth
+    -tr nnUNetTrainer_SlimFormerPlusPlus -f 0 -chk checkpoint_best.pth -step_size 0.5

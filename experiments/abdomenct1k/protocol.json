@@ -1,0 +1,72 @@
+{
+  "alias": "abdomenct1k",
+  "dataset": "Dataset002_AbdomenCT1K",
+  "dataset_id": 2,
+  "model_folder": "nnUNetTrainer_SlimFormerPlusPlus__nnUNetPlans__3d_fullres",
+  "release_tag": "abdomenct1k-best-v1",
+  "checkpoint": "checkpoint_best.pth",
+  "checkpoint_sha256": "427d8799e3e533b46e6201146ff72af702ee78dc1ee5a831f2ce21daecfa7995",
+  "checkpoint_current_epoch": 1186,
+  "trainer_sha256": "ecb4ff6bc99d724248e8215a0c435e8e30cca4e96a122588317ed11a13bb1245",
+  "split": {
+    "fold": 0,
+    "train_cases": 800,
+    "validation_cases": 200,
+    "evaluation_set": "single-fold validation; not an independent test set"
+  },
+  "training": {
+    "run": "slimformer-plusplus-ep1200-b8",
+    "completed_epochs": 1200,
+    "optimizer_steps_per_epoch": 250,
+    "validation_iterations_per_epoch": 50,
+    "global_batch": 8,
+    "gpus": 4,
+    "per_gpu_batch": 2,
+    "initialization_seed": 20260921,
+    "optimizer": "SGD",
+    "initial_lr": 0.01,
+    "momentum": 0.99,
+    "nesterov": true,
+    "weight_decay": 3e-05,
+    "no_weight_decay": [
+      "theta",
+      "relation_bias"
+    ],
+    "scheduler": "PolyLR",
+    "poly_exponent": 0.9,
+    "deep_supervision": false,
+    "compile": false,
+    "best_selection": "highest validation EMA pseudo-Dice"
+  },
+  "inference": {
+    "configuration": "3d_fullres",
+    "patch": [
+      96,
+      160,
+      160
+    ],
+    "tile_step_size": 0.5,
+    "gaussian_weighting": true,
+    "mirroring_axes": [
+      0,
+      1,
+      2
+    ],
+    "ensemble": false,
+    "postprocessing": false
+  },
+  "metrics": {
+    "aggregation": "mean over cases per foreground label, then mean over labels",
+    "Dice_IoU_units": "fraction",
+    "HD95_ASD_units": "mm",
+    "implementation": "reproduce.py; project evaluation convention"
+  },
+  "provenance": {
+    "network_weights_verified_equal_to_release": true,
+    "plans_and_dataset_verified_equal_to_release": true,
+    "source_summary_sha256": "79c1e93c8497dea0e099c2996989edaf4f93abae73972dd2abaeb54fd852c42a",
+    "source_surface_summary_sha256": "58a7255678486ca636654f8c5b5f0bfdbc604f621eb18255e784679506de4f61",
+    "source_splits_sha256": "6c6be9b4a2a700d82cecd7bf94f309a1aa9bc260678e9a24ef4474e9a2cf71fe",
+    "efficiency_source": "measure_slimformer_plusplus_mixswap_ft_cost.py, baseline arm"
+  }
+}

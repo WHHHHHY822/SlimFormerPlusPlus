@@ -11,6 +11,10 @@ jobs:
         with:
           python-version: '3.12'
       - name: Compile source
-        run: python -m compileall -q nnUNetTrainer_SlimFormerPlusPlus.py nnUNetTrainer_SlimFormerPlusPlus_Attention.py install.py check_environment.py smoke_test.py tests
-      - name: Test safe installer
+        run: python -m compileall -q nnUNetTrainer_SlimFormerPlusPlus.py nnUNetTrainer_SlimFormerPlusPlus_Attention.py install.py check_environment.py smoke_test.py reproduce.py benchmark.py tests
+      - name: Test installer and experiment bundles
         run: python -m unittest discover -s tests -v
+      - name: Test evaluation on synthetic images
+        run: |
+          python -m pip install numpy==1.26.4 scipy==1.17.1 SimpleITK==2.5.6
+          python -m unittest discover -s tests -p test_reproduction.py -v

@@ -72,6 +72,18 @@ bash predict.sh amos-ct /path/to/imagesTs /path/to/predictions
 Input files need nnU-Net names (for example `case_0000.nii.gz`). More details
 are in [docs/INFERENCE.md](docs/INFERENCE.md).
 
+## Reproduce the released results
+
+The three datasets have [published splits, protocols and per-case results](experiments/README.md).
+To evaluate the released checkpoint on its fold-0 validation cases:
+
+```bash
+python reproduce.py acdc --images /path/to/images --labels /path/to/labels --output /path/to/evaluation
+```
+
+Replace `acdc` with `abdomenct1k` or `amos-ct`. The same guide covers training
+from scratch and measuring parameters, GFLOPs, latency and GPU memory.
+
 ## Train on your data
 
 Replace `2` with your dataset ID:

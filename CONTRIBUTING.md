@@ -10,7 +10,7 @@ README. Run the checks that apply to your change:
 # No model dependencies needed:
 python -m unittest discover -s tests -v
 python -m compileall -q install.py check_environment.py smoke_test.py nnUNetTrainer_SlimFormerPlusPlus.py \
-    nnUNetTrainer_SlimFormerPlusPlus_Attention.py tests
+    nnUNetTrainer_SlimFormerPlusPlus_Attention.py reproduce.py benchmark.py tests
 
 # With model dependencies and an installed trainer:
 python check_environment.py
@@ -28,7 +28,8 @@ installing your updated copy in the dedicated test environment.
 Keep checkpoint parameter names and tensor shapes stable unless an intentional
 compatibility change is documented. State which tests ran, the runtime versions,
 and any unavailable checks. GitHub CI covers syntax and installer behavior; it
-does not run GPU training.
+does not run GPU training. Reproduction tests also validate the published splits
+and metrics; the image-evaluation CI job uses synthetic NIfTI files.
 
 Do not include dataset images, patient identifiers, checkpoints, access tokens,
 or machine-specific credentials in issues or pull requests. For runtime bugs,

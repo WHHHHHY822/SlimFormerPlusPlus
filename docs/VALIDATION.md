@@ -84,12 +84,30 @@ No completed-training checkpoint of this variant has been released.
 
 ## Scope
 
-These checks establish installation and execution on the tested system.
-They do not establish final segmentation accuracy, efficiency measurements,
-dataset-level GPU prediction, full training equivalence with the original
-checkout, or multi-GPU equivalence. Linux x86_64 has not been validated here.
-Reproducing experiment metrics requires the original data splits, plans,
-batch sizes and evaluation protocol in addition to the model.
+The installation checks establish execution on the tested system. They do not
+establish full training equivalence with the original checkout or multi-GPU
+equivalence. Linux x86_64 has not been validated here.
 
-Source CI checks Python syntax and safe trainer installation. It does not run
-CUDA builds, training or inference.
+Source CI checks syntax, safe installation, experiment-bundle consistency and
+evaluation on synthetic images. It does not run CUDA builds or GPU training.
+
+## Reproduction bundles and patch benchmarks (2026-10-21)
+
+The [three experiment bundles](../experiments/README.md) publish the original
+fold-0 splits, plans, protocols and per-case reference metrics for the released
+best checkpoints. All three released checkpoints were compared tensor by tensor
+with the completed `slimformer-plusplus-ep1200-b8` runs; their weights, plans and
+dataset metadata match. Exported aggregates match the recorded paper table.
+
+The evaluator was checked against saved predictions for one ACDC case, one
+AbdomenCT-1K case and two AMOS cases, including an empty-mask case. All metrics
+matched the reference within 1e-9. Synthetic tests cover geometry, anisotropic
+spacing, empty masks and selection of the exact validation cases.
+
+New GH200 120GB benchmarks measured all three models with batch 1, their actual
+dataset patches, BF16 autocast and eager evaluation: 10 warmup and 50 measured
+iterations per dataset, in separate processes. Each `benchmark.json` preserves
+all timing samples, software versions and source hashes. Parameter and GFLOP
+counts match the historical records. Energy was not measured.
+
+These additions did not repeat full training or full-dataset GPU prediction.

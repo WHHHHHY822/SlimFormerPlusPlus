@@ -1,6 +1,6 @@
 # Source release checklist
 
-Updated: 2026-10-06.
+Updated: 2026-10-21.
 
 ## Completed
 
@@ -22,6 +22,14 @@ Updated: 2026-10-06.
 
 - Linux x86_64 installation and GPU execution.
 - Dataset-specific training/prediction, final metrics and multi-GPU equivalence.
-- Weight export, evaluation and checksums before any future weight release.
+- Full training reproduction and full-dataset prediction with the public runtime.
+
+## Reproduction release
+
+- Three original fold-0 splits, plans, protocols and per-case reference metrics.
+- All three released best checkpoints match the original completed runs.
+- Reproduction and training entry point, with synthetic evaluation tests.
+- Fresh GH200 patch benchmarks, raw timings and a reusable benchmark script.
+- No datasets, labels or energy measurements are included.
 
 Publication workflow: [PUBLISHING.md](PUBLISHING.md).
