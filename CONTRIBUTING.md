@@ -8,20 +8,20 @@ Run the checks that apply to your change:
 
 ```bash
 # No model dependencies needed:
-python -m unittest discover -s tests -v
-python -m compileall -q install.py check_environment.py smoke_test.py nnUNetTrainer_SlimFormerPlusPlus.py \
-    nnUNetTrainer_SlimFormerPlusPlus_Attention.py reproduce.py benchmark.py tests
+python -m unittest discover -s tools/tests -v
+python -m compileall -q tools/install.py tools/check_environment.py tools/smoke_test.py nnUNetTrainer_SlimFormerPlusPlus.py \
+    nnUNetTrainer_SlimFormerPlusPlus_Attention.py reproduce.py benchmark.py tools/tests
 
 # With model dependencies and an installed trainer:
-python check_environment.py
-python install.py --check
-python smoke_test.py
+python tools/check_environment.py
+python tools/install.py --check
+python tools/smoke_test.py
 # Requires an available CUDA GPU:
-python smoke_test.py --cuda
+python tools/smoke_test.py --cuda
 # For the attention variant, add --attention to the three commands above.
 ```
 
-If model code changed, `install.py` will refuse to overwrite a different
+If model code changed, `tools/install.py` will refuse to overwrite a different
 installed trainer. Preserve the old version before explicitly removing it and
 installing your updated copy in the dedicated test environment.
 

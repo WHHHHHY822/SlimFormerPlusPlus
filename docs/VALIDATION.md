@@ -37,7 +37,7 @@ torch library paths from `LD_LIBRARY_PATH`. These are documented in
 [INSTALLATION.md](INSTALLATION.md). PyPI source-build failures were also
 reproduced for both pinned extension versions: their archives omitted `csrc`.
 
-[constraints.txt](../constraints.txt) records the tested dependency snapshot.
+[tools/constraints.txt](../tools/constraints.txt) records the tested dependency snapshot.
 Triton is constrained separately on aarch64 because PyTorch's dependency
 metadata differs between aarch64 and x86_64.
 
@@ -50,7 +50,7 @@ SHA256:
 For synthetic one-input-channel/four-output-channel models with level0 kernel
 3, parameter counts are 6,028,020 for stride `(2,2,2)` and 6,021,748 for
 `(1,2,2)`. Dataset-specific settings are recorded in
-[runtime.json](../runtime.json).
+[runtime.json](../experiments/runtime.json).
 
 The packaged ACDC best checkpoint strictly loads into the public model and
 initializes through the official nnunetv2 2.6.2 predictor on CPU. Earlier

@@ -20,7 +20,7 @@ or runtime log, including the final error. Do not attach private data.
 - Input shape, first stride, and global batch:
 
 **Checks run**
-- `python check_environment.py --cuda` (after installing PyTorch):
+- `python tools/check_environment.py --cuda` (after installing PyTorch):
 - `python -m pip check`:
-- `python install.py --check`:
-- `python smoke_test.py` (or `--cuda`):
+- `python tools/install.py --check`:
+- `python tools/smoke_test.py` (or `--cuda`):

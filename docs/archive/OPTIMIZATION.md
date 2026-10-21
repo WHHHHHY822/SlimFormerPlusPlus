@@ -39,7 +39,7 @@ public checkpoint and a documented local dataset without private scripts.
 ## 2. Extend checks from installation to model behavior
 
 The current source CI runs compilation and installer tests.
-`smoke_test.py --cuda` covers construction and forward/backward on a
+`tools/smoke_test.py --cuda` covers construction and forward/backward on a
 `32 x 32 x 32` patch for two first strides. It does not cover real dataset
 patches, odd spatial dimensions, checkpoint round trips through the predictor
 or multi-GPU training.

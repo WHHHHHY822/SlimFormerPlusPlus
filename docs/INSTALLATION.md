@@ -24,16 +24,16 @@ cd SlimFormerPlusPlus
 python3.12 -m venv .venv
 source .venv/bin/activate
 
-python -m pip install -c constraints.txt torch==2.6.0 torchvision==0.21.0 --index-url https://download.pytorch.org/whl/cu126
-python -m pip install -c constraints.txt pip setuptools wheel packaging ninja
-python check_environment.py --cuda
+python -m pip install -c tools/constraints.txt torch==2.6.0 torchvision==0.21.0 --index-url https://download.pytorch.org/whl/cu126
+python -m pip install -c tools/constraints.txt pip setuptools wheel packaging ninja
+python tools/check_environment.py --cuda
 MAX_JOBS=4 python -m pip install --no-build-isolation -r requirements.txt
 python -m pip check
-python install.py
-python smoke_test.py --cuda
+python tools/install.py
+python tools/smoke_test.py --cuda
 ```
 
-`install.py` registers the trainer in the active nnU-Net environment. Next:
+`tools/install.py` registers the trainer in the active nnU-Net environment. Next:
 [predict or train](USAGE.md), or [reproduce the released results](../experiments/README.md).
 
 ## Attention variant
@@ -47,11 +47,11 @@ In a separate Python 3.12 environment, install PyTorch and build tools with the
 first two `pip install` commands above, then run:
 
 ```bash
-python check_environment.py --attention --cuda
-python -m pip install --no-build-isolation -r requirements-attention.txt
+python tools/check_environment.py --attention --cuda
+python -m pip install --no-build-isolation -r tools/requirements-attention.txt
 python -m pip check
-python install.py --attention
-python smoke_test.py --attention --cuda
+python tools/install.py --attention
+python tools/smoke_test.py --attention --cuda
 ```
 
 For training, use `-tr nnUNetTrainer_SlimFormerPlusPlus_Attention`.
@@ -84,10 +84,10 @@ reproduction of published metrics.
   not provide the `nvcc` compiler.
 - Install PyTorch and torchvision together using the versions above and
   CUDA wheel index. Install them before building Mamba.
-- `constraints.txt` records the dependency versions from the validated
+- `tools/constraints.txt` records the dependency versions from the validated
   installation. Requirements pin the CUDA extensions to immutable commits
   containing their complete CUDA sources.
-- Run `python check_environment.py --cuda` before installing the remaining
+- Run `python tools/check_environment.py --cuda` before installing the remaining
   requirements. On a cluster's build/login node, omit `--cuda`; run the CUDA
   smoke test later on a GPU node.
 - `--no-build-isolation` makes the CUDA extensions build against the PyTorch
@@ -135,18 +135,18 @@ environment, first check that its Python, PyTorch, torchvision, nnU-Net and
 dynamic-network-architectures versions match the reference profile. Then:
 
 ```bash
-python -m pip install -c constraints.txt pip setuptools wheel packaging ninja
-python check_environment.py --cuda
-MAX_JOBS=4 python -m pip install --no-build-isolation -r requirements-model.txt
+python -m pip install -c tools/constraints.txt pip setuptools wheel packaging ninja
+python tools/check_environment.py --cuda
+MAX_JOBS=4 python -m pip install --no-build-isolation -r tools/requirements-model.txt
 python -m pip check
-python install.py
-python smoke_test.py --cuda
+python tools/install.py
+python tools/smoke_test.py --cuda
 ```
 
-Run these commands from the repository root. `install.py` refuses to overwrite
+Run these commands from the repository root. `tools/install.py` refuses to overwrite
 a different trainer; back up and explicitly remove that file before replacing
 it. To check an existing installation without writing, run
-`python install.py --check`.
+`python tools/install.py --check`.
 
 ## Troubleshooting
 
@@ -161,5 +161,5 @@ it. To check an existing installation without writing, run
 | `No module named torch` during a build | Install PyTorch first, then use `--no-build-isolation`. |
 
 For an installation issue, include the exact command, the final 80 log lines,
-`python check_environment.py --cuda`, and `python -m pip check` output. The final
+`python tools/check_environment.py --cuda`, and `python -m pip check` output. The final
 compiler error is more useful than a screenshot containing only the traceback.

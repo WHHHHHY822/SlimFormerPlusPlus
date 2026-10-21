@@ -27,19 +27,19 @@ def main():
     except Exception as error:
         raise RuntimeError(
             f'PyTorch/torchvision import failed: {error}\n'
-            'Install the paired versions from README. In NVIDIA containers, check '
+            'Install the paired versions from docs/INSTALLATION.md. In NVIDIA containers, check '
             'LD_LIBRARY_PATH for another installation of torch/lib. '
             'See docs/INSTALLATION.md.'
         ) from error
     for name, module, expected in (('torch', torch, '2.6.0'), ('torchvision', torchvision, '0.21.0')):
         print(f'{name}: {module.__version__} ({module.__file__})')
         if module.__version__.split('+')[0] != expected:
-            raise RuntimeError(f'The reference profile requires {name}=={expected}. See README.')
+            raise RuntimeError(f'The reference profile requires {name}=={expected}. See docs/INSTALLATION.md.')
     print(f'PyTorch CUDA: {torch.version.cuda}; C++11 ABI: {torch._C._GLIBCXX_USE_CXX11_ABI}')
     if torch.version.cuda is None:
-        raise RuntimeError('CPU-only PyTorch is installed. Install the CUDA build from README.')
+        raise RuntimeError('CPU-only PyTorch is installed. Install the CUDA build from docs/INSTALLATION.md.')
     if torch.version.cuda != '12.6':
-        raise RuntimeError('The reference profile requires CUDA 12.6 PyTorch. Use the cu126 index from README.')
+        raise RuntimeError('The reference profile requires CUDA 12.6 PyTorch. Use the cu126 index from docs/INSTALLATION.md.')
     available = torch.cuda.is_available()
     print(f'GPU: {torch.cuda.get_device_name(0) if available else "not available on this node"}')
     if args.cuda and not available:
@@ -77,7 +77,7 @@ def main():
             print(f'{name}: {metadata.version(name)}')
         except metadata.PackageNotFoundError:
             pass
-    print('PASS environment checks. Run smoke_test.py --cuda after installing the trainer.')
+    print('PASS environment checks. Run python tools/smoke_test.py --cuda after installing the trainer.')
 
 
 if __name__ == '__main__':

@@ -38,12 +38,12 @@ def main():
     if len(roots) != 1:
         parser.exit(1, 'Cannot identify a unique nnU-Net trainer directory. Check your environment.\n')
     filename = ATTENTION_FILENAME if args.attention else FILENAME
-    source = Path(__file__).resolve().with_name(filename)
+    source = Path(__file__).resolve().parent.parent / filename
     destination = roots[0] / filename
     print(f'Python: {sys.executable}\nTrainer: {destination}')
     if args.check:
         if not destination.is_file() or destination.read_bytes() != source.read_bytes():
-            command = 'python install.py' + (' --attention' if args.attention else '')
+            command = 'python tools/install.py' + (' --attention' if args.attention else '')
             parser.exit(1, f'This release is not installed. Run {command}.\n')
         print('Installed source matches this release.')
         return
