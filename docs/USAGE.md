@@ -62,6 +62,6 @@ nnUNetv2_plan_and_preprocess -d 2 --verify_dataset_integrity
 nnUNetv2_train 2 3d_fullres 0 -tr nnUNetTrainer_SlimFormerPlusPlus
 ```
 
-For the attention variant, use `-tr nnUNetTrainer_SlimFormerPlusPlus_Attention`.
+For the Mamba-free implementation, use `-tr nnUNetTrainer_SlimFormerPlusPlus_MambaFree`.
 To reproduce the published datasets with their original plans, splits and batch
 size, follow the [reproduction guide](../experiments/README.md).

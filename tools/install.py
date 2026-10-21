@@ -6,7 +6,7 @@ import shutil
 import sys
 
 FILENAME = 'nnUNetTrainer_SlimFormerPlusPlus.py'
-ATTENTION_FILENAME = 'nnUNetTrainer_SlimFormerPlusPlus_Attention.py'
+MAMBA_FREE_FILENAME = 'nnUNetTrainer_SlimFormerPlusPlus_MambaFree.py'
 
 
 def install(source, destination):
@@ -27,8 +27,8 @@ def install(source, destination):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true', help='Check destination without writing')
-    parser.add_argument('--attention', action='store_true',
-                        help='Use the attention variant, which does not need mamba-ssm')
+    parser.add_argument('--mamba-free', '--attention', dest='mamba_free', action='store_true',
+                        help='Use the Mamba-free implementation, which does not need mamba-ssm')
     args = parser.parse_args()
     spec = importlib.util.find_spec('nnunetv2')
     if spec is None or not spec.submodule_search_locations:
@@ -37,13 +37,13 @@ def main():
     roots = [p for p in roots if p.is_dir()]
     if len(roots) != 1:
         parser.exit(1, 'Cannot identify a unique nnU-Net trainer directory. Check your environment.\n')
-    filename = ATTENTION_FILENAME if args.attention else FILENAME
+    filename = MAMBA_FREE_FILENAME if args.mamba_free else FILENAME
     source = Path(__file__).resolve().parent.parent / filename
     destination = roots[0] / filename
     print(f'Python: {sys.executable}\nTrainer: {destination}')
     if args.check:
         if not destination.is_file() or destination.read_bytes() != source.read_bytes():
-            command = 'python tools/install.py' + (' --attention' if args.attention else '')
+            command = 'python tools/install.py' + (' --mamba-free' if args.mamba_free else '')
             parser.exit(1, f'This release is not installed. Run {command}.\n')
         print('Installed source matches this release.')
         return

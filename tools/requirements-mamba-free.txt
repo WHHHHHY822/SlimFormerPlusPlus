@@ -1,4 +1,4 @@
-# Attention variant: no mamba-ssm, causal-conv1d or transformers.
+# Mamba-free implementation: no mamba-ssm, causal-conv1d or transformers.
 # Install CUDA PyTorch first (see README).
 -c constraints.txt
 torch==2.6.0

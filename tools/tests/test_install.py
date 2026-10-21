@@ -27,9 +27,9 @@ class InstallerTests(unittest.TestCase):
             destination = package / 'training/nnUNetTrainer'
             destination.mkdir(parents=True)
             (package / '__init__.py').touch()
-            for attention in (False, True):
-                flags = ['--attention'] if attention else []
-                filename = 'nnUNetTrainer_SlimFormerPlusPlus' + ('_Attention' if attention else '') + '.py'
+            for flag in (None, '--mamba-free', '--attention'):
+                flags = [flag] if flag else []
+                filename = 'nnUNetTrainer_SlimFormerPlusPlus' + ('_MambaFree' if flag else '') + '.py'
                 result = subprocess.run(
                     [sys.executable, str(root / 'tools/install.py')] + flags,
                     env=dict(os.environ, PYTHONPATH=temp), stdout=subprocess.PIPE,

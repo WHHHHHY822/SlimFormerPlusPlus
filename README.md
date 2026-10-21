@@ -15,7 +15,7 @@ SlimFormer++ is a 3D medical image segmentation network for nnU-Net v2.
 
 Reference environment: **Linux, Python 3.12, PyTorch 2.6.0 and CUDA Toolkit 12.6**.
 Follow the [installation guide](docs/INSTALLATION.md) for setup, GPU compatibility,
-troubleshooting and the [attention variant](docs/INSTALLATION.md#attention-variant).
+troubleshooting and the [Mamba-free implementation](docs/INSTALLATION.md#mamba-free-implementation).
 
 ## Pretrained checkpoints
 

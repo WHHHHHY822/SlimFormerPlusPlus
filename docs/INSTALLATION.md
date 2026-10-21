@@ -36,25 +36,24 @@ python tools/smoke_test.py --cuda
 `tools/install.py` registers the trainer in the active nnU-Net environment. Next:
 [predict or train](USAGE.md), or [reproduce the released results](../experiments/README.md).
 
-## Attention variant
+## Mamba-free implementation
 
-The [attention trainer](../nnUNetTrainer_SlimFormerPlusPlus_Attention.py) replaces
-encoder-1 selective mixing with 3-head self-attention in 8×8×8 windows.
-It needs neither Mamba, causal-conv1d nor Transformers. No pretrained checkpoint
-is available for this variant.
+Uses window attention in the SM block, without Mamba or causal-conv1d.
+No pretrained checkpoint is available for this implementation; paper results
+and released weights refer to the original model.
 
 In a separate Python 3.12 environment, install PyTorch and build tools with the
 first two `pip install` commands above, then run:
 
 ```bash
-python tools/check_environment.py --attention --cuda
-python -m pip install --no-build-isolation -r tools/requirements-attention.txt
+python tools/check_environment.py --mamba-free --cuda
+python -m pip install --no-build-isolation -r tools/requirements-mamba-free.txt
 python -m pip check
-python tools/install.py --attention
-python tools/smoke_test.py --attention --cuda
+python tools/install.py --mamba-free
+python tools/smoke_test.py --mamba-free --cuda
 ```
 
-For training, use `-tr nnUNetTrainer_SlimFormerPlusPlus_Attention`.
+For training, use `-tr nnUNetTrainer_SlimFormerPlusPlus_MambaFree`.
 
 ## GPU compatibility
 

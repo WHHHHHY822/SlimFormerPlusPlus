@@ -10,7 +10,7 @@ Run the checks that apply to your change:
 # No model dependencies needed:
 python -m unittest discover -s tools/tests -v
 python -m compileall -q tools/install.py tools/check_environment.py tools/smoke_test.py nnUNetTrainer_SlimFormerPlusPlus.py \
-    nnUNetTrainer_SlimFormerPlusPlus_Attention.py reproduce.py benchmark.py tools/tests
+    nnUNetTrainer_SlimFormerPlusPlus_MambaFree.py reproduce.py benchmark.py tools/tests
 
 # With model dependencies and an installed trainer:
 python tools/check_environment.py
@@ -18,7 +18,7 @@ python tools/install.py --check
 python tools/smoke_test.py
 # Requires an available CUDA GPU:
 python tools/smoke_test.py --cuda
-# For the attention variant, add --attention to the three commands above.
+# For the Mamba-free implementation, add --mamba-free to the three commands above.
 ```
 
 If model code changed, `tools/install.py` will refuse to overwrite a different

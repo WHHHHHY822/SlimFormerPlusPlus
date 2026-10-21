@@ -8,20 +8,20 @@ from pathlib import Path
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--cuda', action='store_true', help='Also check CUDA forward/backward')
-    parser.add_argument('--attention', action='store_true', help='Check the attention variant')
+    parser.add_argument('--mamba-free', '--attention', dest='mamba_free', action='store_true', help='Check the Mamba-free implementation')
     args = parser.parse_args()
     import torch
     import nnunetv2
-    if not args.attention:
+    if not args.mamba_free:
         for extension in ('selective_scan_cuda', 'causal_conv1d_cuda'):
             importlib.import_module(extension)
         print('PASS Mamba and causal-conv1d CUDA extensions import')
     from nnunetv2.utilities.find_class_by_name import recursive_find_python_class
-    name = 'nnUNetTrainer_SlimFormerPlusPlus' + ('_Attention' if args.attention else '')
+    name = 'nnUNetTrainer_SlimFormerPlusPlus' + ('_MambaFree' if args.mamba_free else '')
     module = importlib.import_module('nnunetv2.training.nnUNetTrainer.' + name)
-    if args.attention:
-        assert 'mamba_ssm' not in sys.modules, 'The attention variant imported mamba_ssm'
-        print('PASS attention variant imports without mamba_ssm')
+    if args.mamba_free:
+        assert 'mamba_ssm' not in sys.modules, 'The Mamba-free implementation imported mamba_ssm'
+        print('PASS Mamba-free implementation imports without mamba_ssm')
     trainer = recursive_find_python_class(
         str(Path(nnunetv2.__path__[0]) / 'training' / 'nnUNetTrainer'),
         name, 'nnunetv2.training.nnUNetTrainer')

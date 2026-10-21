@@ -65,7 +65,7 @@ existing parameter names, shapes and checkpoint compatibility when adding tests.
 
 Add a benchmark command that emits JSON instead of relying only on figures.
 Use the dataset-specific patch sizes in `runtime.json`, plus both original
-and attention models. Record hardware, runtime versions, dtype, batch size,
+and Mamba-free models. Record hardware, runtime versions, dtype, batch size,
 input shape, warmup count, measured iterations and compile settings.
 
 Measure evaluation forward latency, training forward/backward latency and peak
@@ -96,7 +96,7 @@ only if measured latency or memory improves on representative shapes.
 The README disables `nnUNet_compile` for its reference training command.
 Benchmark eager and compiled execution in separate runs before advertising
 compile support. Record graph breaks, first-run cost, steady-state behavior
-and any numerical differences for Mamba and the attention variant separately.
+and any numerical differences for Mamba and the Mamba-free implementation separately.
 
 If memory limits training, evaluate activation checkpointing around encoder
 blocks as an optional setting, measuring the memory reduction and added

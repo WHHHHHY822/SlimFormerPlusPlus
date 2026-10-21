@@ -63,7 +63,7 @@ The public installation uses official nnunetv2 2.6.2 and
 dynamic-network-architectures 0.4.1. `runtime.json` preserves the original
 versions; it is not an installation lock file.
 
-## Attention variant
+## Mamba-free implementation
 
 Fresh installation and CUDA checks were repeated on 2026-10-06 with the
 current constraints, official PyTorch 2.6.0+cu126, torchvision 0.21.0 and

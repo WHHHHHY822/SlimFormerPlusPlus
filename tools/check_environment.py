@@ -12,7 +12,7 @@ import sys
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--attention', action='store_true', help='Skip CUDA build-tool checks')
+    parser.add_argument('--mamba-free', '--attention', dest='mamba_free', action='store_true', help='Skip CUDA build-tool checks')
     parser.add_argument('--cuda', action='store_true', help='Require an available CUDA GPU')
     args = parser.parse_args()
     print(f'Python: {sys.version.split()[0]} ({sys.executable})')
@@ -47,7 +47,7 @@ def main():
     if shutil.which('git') is None:
         raise RuntimeError('Git is required to install the pinned source dependencies.')
 
-    if not args.attention:
+    if not args.mamba_free:
         if not sys.platform.startswith('linux'):
             raise RuntimeError('Use Linux or WSL2 for the reference Mamba installation.')
         from torch.utils.cpp_extension import CUDA_HOME

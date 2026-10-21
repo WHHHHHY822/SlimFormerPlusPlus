@@ -11,7 +11,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Compile source
-        run: python -m compileall -q nnUNetTrainer_SlimFormerPlusPlus.py nnUNetTrainer_SlimFormerPlusPlus_Attention.py tools/install.py tools/check_environment.py tools/smoke_test.py reproduce.py benchmark.py tools/tests
+        run: python -m compileall -q nnUNetTrainer_SlimFormerPlusPlus.py nnUNetTrainer_SlimFormerPlusPlus_MambaFree.py tools/install.py tools/check_environment.py tools/smoke_test.py reproduce.py benchmark.py tools/tests
       - name: Test installer and experiment bundles
         run: python -m unittest discover -s tools/tests -v
       - name: Test evaluation on synthetic images

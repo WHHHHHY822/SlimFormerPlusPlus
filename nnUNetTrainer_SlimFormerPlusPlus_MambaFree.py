@@ -1,4 +1,4 @@
-"""SlimFormer++ attention variant: window self-attention in encoder 1.
+"""SlimFormer++ Mamba-free implementation for easier installation.
 
 Standalone model and nnU-Net v2 trainer, independent of
 ``nnUNetTrainer_SlimFormerPlusPlus.py``. The two ``SelectiveMixer`` token mixers
@@ -471,7 +471,7 @@ class AugmentedBottleneck(nn.Module):
         return rearrange(x, "b (d h w) c -> b c d h w", d=d, h=h, w=w)
 
 
-class SlimFormerPlusPlusAttention(nn.Module):
+class SlimFormerPlusPlusMambaFree(nn.Module):
     """SlimFormer++ with window self-attention, not selective mixing, in encoder1."""
     def __init__(self, in_channels=1, out_channels=4, first_stride=(2, 2, 2),
                  level0_kernel=(3, 3, 3), drop=0.2, drop_path=0.2):
@@ -526,7 +526,7 @@ except ModuleNotFoundError as exc:
     if exc.name is None or not exc.name.startswith("nnunetv2"):
         raise
 else:
-    class nnUNetTrainer_SlimFormerPlusPlus_Attention(nnUNetTrainer):
+    class nnUNetTrainer_SlimFormerPlusPlus_MambaFree(nnUNetTrainer):
         """SlimFormer++ training schedule; encoder 1 uses window self-attention."""
         INIT_SEED = 20260921
 
@@ -558,7 +558,7 @@ else:
                 raise ValueError("Expected full-resolution first stage")
             with torch.random.fork_rng(devices=[]):
                 torch.random.default_generator.manual_seed(20260921)
-                return SlimFormerPlusPlusAttention(
+                return SlimFormerPlusPlusMambaFree(
                     num_input_channels, num_output_channels,
                     first_stride=arch_init_kwargs["strides"][1],
                     level0_kernel=arch_init_kwargs["kernel_sizes"][0],
