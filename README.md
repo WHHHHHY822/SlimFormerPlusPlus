@@ -103,10 +103,6 @@ More in the guides: [Installation](docs/INSTALLATION.md) ·
 - [ ] 3D Slicer extension
 - [ ] Installation and GPU validation on Linux x86_64
 - [ ] Full training reproduction and full-dataset prediction with the public runtime
-- [ ] Multi-GPU equivalence checks
-
-Contributions are welcome: please open an [issue][issues-url] before changing the
-architecture or training, and follow [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Citation
 
@@ -145,4 +141,3 @@ README layout adapted from [Best-README-Template](https://github.com/othneildrew
 [release-acdc]: https://github.com/WHHHHHY822/SlimFormerPlusPlus/releases/tag/acdc-best-v1
 [release-abdomenct1k]: https://github.com/WHHHHHY822/SlimFormerPlusPlus/releases/tag/abdomenct1k-best-v1
 [release-amos]: https://github.com/WHHHHHY822/SlimFormerPlusPlus/releases/tag/amos2022-ct-best-v1
-[issues-url]: https://github.com/WHHHHHY822/SlimFormerPlusPlus/issues
