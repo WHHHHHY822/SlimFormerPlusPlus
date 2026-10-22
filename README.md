@@ -38,7 +38,7 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#todo-list">TODO List</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#citation">Citation</a></li>
@@ -154,11 +154,12 @@ per-case metrics, training from scratch and efficiency benchmarks.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Roadmap
+## TODO List
 
 - [x] Pretrained checkpoints for ACDC, AbdomenCT-1K and AMOS2022 CT
 - [x] Reproduction bundles and GPU benchmarks
 - [x] Mamba-free implementation (no pretrained checkpoint)
+- [ ] 3D Slicer extension *(on the way)*
 - [ ] Validate installation and GPU execution on Linux x86_64
 - [ ] Full training reproduction and full-dataset prediction with the public runtime
 - [ ] Multi-GPU equivalence checks
