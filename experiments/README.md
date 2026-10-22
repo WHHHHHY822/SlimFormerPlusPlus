@@ -1,18 +1,28 @@
+[← Project home](../README.md) · [Documentation](../docs/README.md)
+
 # Reproduce the released results
 
-These are **fold-0 validation results**, not independent test-set results.
-They use the three released best checkpoints from the completed 1,200-epoch,
-global-batch-8 runs. Their weights and plans were checked against the original runs.
+Dice and HD95 below follow **Table III of the paper**; IoU and ASD are
+**fold-0 validation measurements**, not independent test-set results.
+The reproduction bundles use the three released best checkpoints from the
+completed 1,200-epoch, global-batch-8 runs. Their weights and plans were checked
+against the original runs.
 
-| Dataset argument | Train / validation volumes | Dice (%) | IoU (%) | HD95 (mm) | ASD (mm) |
+**On this page:** [Evaluate](#evaluate-a-checkpoint) ·
+[Train from scratch](#train-from-scratch) · [Measure efficiency](#measure-efficiency)
+
+## Published results
+
+| Dataset argument | Train / validation volumes | Dice (%) ↑ | IoU (%) ↑ | HD95 (mm) ↓ | ASD (mm) ↓ |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| `acdc` | 240 / 60 | 91.60 | 85.05 | 3.30 | 0.69 |
-| `abdomenct1k` | 800 / 200 | 95.49 | 91.83 | 2.89 | 0.67 |
-| `amos-ct` | 200 / 100 | 90.40 | 84.14 | 10.01 | 6.38 |
+| `acdc` | 240 / 60 | 91.56 | 85.05 | 3.70 | 0.69 |
+| `abdomenct1k` | 800 / 200 | 95.62 | 91.83 | 2.84 | 0.67 |
+| `amos-ct` | 200 / 100 | 89.76 | 84.14 | 11.36 | 6.38 |
 
 Each dataset folder contains the exact plans, dataset metadata, split, short
 protocol, per-case metrics, aggregate metrics and recorded parameter/FLOP counts.
-Dice and IoU in CSV/JSON are fractions. Metrics exclude background, average over
+CSV/JSON retain the measured fold-0 reference metrics used by `reproduce.py`;
+Dice and IoU are fractions. These metrics exclude background, average over
 cases per label, then over labels; distance metrics follow `reproduce.py`.
 ACDC has 120 training and 30 validation patients, with no patient overlap.
 

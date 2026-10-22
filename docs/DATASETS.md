@@ -1,3 +1,5 @@
+[← Project home](../README.md) · [Documentation](README.md)
+
 # Dataset download and inference preparation
 
 These steps prepare NIfTI images for [checkpoint prediction](USAGE.md#predict-with-a-released-checkpoint).

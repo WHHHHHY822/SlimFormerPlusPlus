@@ -1,3 +1,5 @@
+[← Project home](../README.md) · [Documentation](README.md)
+
 # Validation
 
 ## Original model: fresh installation and CUDA execution
@@ -97,7 +99,8 @@ The [three experiment bundles](../experiments/README.md) publish the original
 fold-0 splits, plans, protocols and per-case reference metrics for the released
 best checkpoints. All three released checkpoints were compared tensor by tensor
 with the completed `slimformer-plusplus-ep1200-b8` runs; their weights, plans and
-dataset metadata match. Exported aggregates match the recorded paper table.
+dataset metadata match. Exported aggregates match the bundled per-case metrics;
+the result tables report the paper's Table III Dice and HD95 values separately.
 
 The evaluator was checked against saved predictions for one ACDC case, one
 AbdomenCT-1K case and two AMOS cases, including an empty-mask case. All metrics

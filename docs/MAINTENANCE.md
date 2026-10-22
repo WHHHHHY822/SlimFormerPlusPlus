@@ -1,3 +1,5 @@
+[← Project home](../README.md) · [Documentation](README.md)
+
 # Release maintenance
 
 ## Before publishing

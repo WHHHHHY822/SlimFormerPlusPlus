@@ -1,3 +1,5 @@
+[← Project home](README.md) · [Documentation](docs/README.md)
+
 # Contributing
 
 Please discuss architecture or training-behavior changes in an issue before

@@ -1,3 +1,5 @@
+[← Project home](../README.md) · [Documentation](README.md)
+
 # Installation
 
 Use Linux, an NVIDIA GPU, Git and a C++ compiler with the reference profile below.

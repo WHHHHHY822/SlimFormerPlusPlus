@@ -1,3 +1,5 @@
+[← Project home](../README.md) · [Documentation](README.md)
+
 # Predict and train
 
 Follow the [installation guide](INSTALLATION.md), then set
