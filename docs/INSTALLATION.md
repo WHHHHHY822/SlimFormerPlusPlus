@@ -12,11 +12,10 @@ Start in a fresh environment. Source compilation usually takes 10–20 minutes.
 | CUDA Toolkit | 12.6, with `nvcc` and a compatible C++ compiler |
 | nnU-Net / dynamic-network-architectures | 2.6.2 / 0.4.1 |
 | Mamba / causal-conv1d | 2.2.2 / 1.4.0, pinned GitHub commits |
-| Validated system | Linux aarch64, NVIDIA GH200 |
+| Validated system | Linux aarch64 (NVIDIA GH200) and x86_64 (NVIDIA RTX 3090) |
 
-Linux x86_64 follows the same source-build procedure but has not been validated
-in this release. Use Linux through WSL2 on Windows. macOS and CPU-only execution
-are outside the original model's reference profile.
+Use Linux through WSL2 on Windows. macOS and CPU-only execution are outside the
+original model's reference profile.
 
 ## Install SlimFormer++
 
@@ -62,7 +61,8 @@ For training, use `-tr nnUNetTrainer_SlimFormerPlusPlus_MambaFree`.
 | GPU | Current reference profile |
 | --- | --- |
 | GH200 | Fresh installation and CUDA forward/backward validated. |
-| RTX 3090 / 4090 | Expected to work from CUDA architecture compatibility; not tested on these GPUs. |
+| RTX 3090 | Fresh installation and CUDA forward/backward validated. |
+| RTX 4090 | Expected to work from CUDA architecture compatibility; not tested. |
 | RTX 5090 / other Blackwell GPUs | Unsupported by this profile; requires a separately validated environment. |
 
 The RTX 3090 and 4090 have compute capabilities 8.6 and 8.9. The pinned

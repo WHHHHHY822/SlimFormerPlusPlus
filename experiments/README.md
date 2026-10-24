@@ -66,7 +66,8 @@ python reproduce.py acdc --train --images /path/to/images --labels /path/to/labe
 
 This links the inputs, installs the published plans/split, preprocesses and trains.
 The reference uses four GPUs, global batch 8 and 1,200 epochs. A different GPU count
-must divide batch 8 evenly. Full settings are in each `protocol.json`.
+must divide batch 8 evenly. `reproduce.py` applies the full settings in each
+`protocol.json` on top of `plans.json`.
 The historical training environment is in [runtime.json](runtime.json); the
 supported public installation is in [VALIDATION.md](../docs/VALIDATION.md).
 Retraining is not guaranteed to be bitwise identical across environments.

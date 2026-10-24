@@ -47,7 +47,7 @@ the reproduction bundles are separate measurements, not independent test-set res
 > [!NOTE]
 > Requires Linux, an NVIDIA GPU, Python 3.12, Git, a C++ compiler and CUDA Toolkit
 > 12.6 with `nvcc`. Mamba and causal-conv1d compile from source (usually 10–20 min).
-> Validated on Linux aarch64 with an NVIDIA GH200.
+> Validated on Linux aarch64 (NVIDIA GH200) and x86_64 (NVIDIA RTX 3090).
 
 **Install**
 
@@ -101,7 +101,7 @@ More in the guides: [Installation](docs/INSTALLATION.md) ·
 - [x] Reproduction bundles and GPU benchmarks
 - [x] Mamba-free implementation (no pretrained checkpoint)
 - [ ] 3D Slicer extension
-- [ ] Installation and GPU validation on Linux x86_64
+- [x] Installation and GPU validation on Linux x86_64
 - [ ] Full training reproduction and full-dataset prediction with the public runtime
 
 ## Citation

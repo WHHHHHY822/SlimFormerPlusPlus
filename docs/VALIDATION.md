@@ -88,7 +88,7 @@ No completed-training checkpoint of this variant has been released.
 
 The installation checks establish execution on the tested system. They do not
 establish full training equivalence with the original checkout or multi-GPU
-equivalence. Linux x86_64 has not been validated here.
+equivalence.
 
 Source CI checks syntax, safe installation, experiment-bundle consistency and
 evaluation on synthetic images. It does not run CUDA builds or GPU training.
@@ -114,3 +114,14 @@ all timing samples, software versions and source hashes. Parameter and GFLOP
 counts match the historical records. Energy was not measured.
 
 These additions did not repeat full training or full-dataset GPU prediction.
+
+## Linux x86_64 and RTX 3090 (2026-10-24)
+
+A fresh installation following the README on Linux x86_64 with two NVIDIA RTX
+3090 24GB GPUs (Python 3.12.15, CUDA Toolkit 12.6.85, GCC 9.4.0, driver
+570.211.01) passed `pip check` and the CUDA smoke tests for both models. With
+the released ACDC checkpoint, `reproduce.py acdc` matched all four reference
+metrics within 4e-5. `benchmark.py` parameter and GFLOP counts matched for all
+three datasets. From fresh directories, `reproduce.py acdc --train --gpus 2`
+extracted the fingerprint, preprocessed and trained five epochs (about 157 s
+each) before it was stopped.
