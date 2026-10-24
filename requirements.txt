@@ -1,3 +1,14 @@
--r tools/requirements-model.txt
+# Reference profile; install CUDA PyTorch first (see docs/INSTALLATION.md).
+-c tools/constraints.txt
+torch==2.6.0
+torchvision==0.21.0
+einops==0.8.0
+monai==1.4.0
+# Complete CUDA sources, pinned to immutable revisions.
+mamba-ssm @ git+https://github.com/state-spaces/mamba.git@8ffd905c91d207f5c0cc84fc2a2fb748655094f0
+causal-conv1d @ git+https://github.com/Dao-AILab/causal-conv1d.git@f8c246707eff3431b5cf2ce6defa4b7f309ea9fb
+# Mamba 2.2.2 needs generation classes removed in Transformers 5.
+transformers==4.46.3
+mednextv1 @ git+https://github.com/MIC-DKFZ/MedNeXt.git@0b78ed869fbd1cc2fd38754d2f8519f1b72d43ba
 nnunetv2==2.6.2
 dynamic-network-architectures==0.4.1

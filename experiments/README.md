@@ -1,4 +1,4 @@
-[← Project home](../README.md) · [Documentation](../docs/README.md)
+[← Project home](../README.md)
 
 # Reproduce the released results
 
@@ -29,7 +29,7 @@ ACDC has 120 training and 30 validation patients, with no patient overlap.
 ## Evaluate a checkpoint
 
 Follow the [installation guide](../docs/INSTALLATION.md) first. Obtain the data through
-the [official sources](../docs/DATASETS.md); images and labels are not redistributed.
+the [official sources](../docs/USAGE.md#prepare-data); images and labels are not redistributed.
 Point the command at your images and matching reference labels:
 
 ```bash
@@ -71,6 +71,8 @@ must divide batch 8 evenly. `reproduce.py` applies the full settings in each
 The historical training environment is in [runtime.json](runtime.json); the
 supported public installation is in [VALIDATION.md](../docs/VALIDATION.md).
 Retraining is not guaranteed to be bitwise identical across environments.
+The `efficiency` field in `runtime.json` preserves the historical per-dataset
+parameter and FLOP records.
 
 ## Measure efficiency
 

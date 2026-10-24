@@ -39,7 +39,7 @@ class PublishedExperimentTests(unittest.TestCase):
                 self.assertEqual(pairs, {(case, label) for case in split['val'] for label in expected_labels})
                 self.assertEqual(summarize(rows), json.loads((folder / 'metrics.json').read_text()))
                 benchmark = json.loads((folder / 'benchmark.json').read_text())
-                historical = json.loads((folder / 'efficiency.json').read_text())
+                historical = json.loads((ROOT / 'experiments/runtime.json').read_text())['efficiency'][alias]
                 self.assertEqual(len(benchmark['latency_ms']), 50)
                 self.assertEqual(benchmark['params'], historical['params'])
                 self.assertAlmostEqual(benchmark['gflops_total'], historical['gflops_total'])

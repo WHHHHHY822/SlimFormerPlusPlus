@@ -1,4 +1,4 @@
-[← Project home](../README.md) · [Documentation](README.md)
+[← Project home](../README.md)
 
 # Validation
 

@@ -1,4 +1,4 @@
-[← Project home](../README.md) · [Documentation](README.md)
+[← Project home](../README.md)
 
 # Installation
 
@@ -35,7 +35,7 @@ python tools/smoke_test.py --cuda
 ```
 
 `tools/install.py` registers the trainer in the active nnU-Net environment. Next:
-[predict or train](USAGE.md), or [reproduce the released results](../experiments/README.md).
+[prepare data, predict or train](USAGE.md), or [reproduce the released results](../experiments/README.md).
 
 ## Mamba-free implementation
 
@@ -138,7 +138,7 @@ dynamic-network-architectures versions match the reference profile. Then:
 ```bash
 python -m pip install -c tools/constraints.txt pip setuptools wheel packaging ninja
 python tools/check_environment.py --cuda
-MAX_JOBS=4 python -m pip install --no-build-isolation -r tools/requirements-model.txt
+MAX_JOBS=4 python -m pip install --no-build-isolation -r requirements.txt
 python -m pip check
 python tools/install.py
 python tools/smoke_test.py --cuda
