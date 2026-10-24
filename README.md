@@ -8,71 +8,124 @@
 
 **Token Mixing Where It Matters for Efficient 3D Medical Image Segmentation**
 
-[Install](docs/INSTALLATION.md) · [Usage](docs/USAGE.md) · [Reproduce](experiments/README.md) · [Validation](docs/VALIDATION.md)
+[Paper][arxiv-url] · [Pretrained weights][releases-url] · [Installation](docs/INSTALLATION.md) · [Usage](docs/USAGE.md) · [Reproduction](experiments/README.md)
 
-<img src="assets/performance_efficiency_pruning.png" alt="Mean Dice versus GFLOPs, model sizes and pruning comparisons" width="80%" />
+<img src="assets/performance_efficiency_pruning.png" alt="Mean Dice versus GFLOPs, with model parameter counts and pruning comparisons" width="53%" />
+<img src="assets/efficiency_radar.png" alt="Normalized comparison of parameters, GFLOPs, peak memory, latency and energy; outward is better" width="44%" />
 
-**5.98M parameters · 87.84% mean Dice · 6.50 mm mean HD95**<br />
-<sub>Paper, Table III: comparison with 12 baselines across eight CT, MRI and ultrasound datasets.</sub>
+**5.98M** parameters &nbsp;·&nbsp; **87.84%** mean Dice &nbsp;·&nbsp; **6.50 mm** mean HD95<br />
+<sub>Highest mean Dice and lowest mean HD95 with the fewest parameters, against 12 baselines on
+eight public CT, MRI and ultrasound datasets (paper, Table III).</sub>
 
 </div>
 
-SlimFormer++ is an [nnU-Net v2](https://github.com/MIC-DKFZ/nnUNet) trainer with
-windowed Mamba mixing in the first encoder stage, channel MLPs in deeper stages,
-and sparse long-range context at the bottleneck. A
-[Mamba-free variant](docs/INSTALLATION.md#mamba-free-implementation) is also
-available, with no pretrained weights.
+## Overview
+
+SlimFormer++ is an [nnU-Net v2](https://github.com/MIC-DKFZ/nnUNet) trainer that
+keeps token mixing only in the stages where it contributes.
+
+- **Selective Mixing** — windowed Mamba mixing in the first encoder stage;
+  deeper stages use residual channel MLPs.
+- **Augmented Mixing** — a depthwise convolution at the bottleneck, augmented with
+  similarity-weighted sparse long-range context at cost linear in voxel count.
+- **Mamba-free implementation** — window attention instead of Mamba, without
+  building mamba-ssm or causal-conv1d ([setup](docs/INSTALLATION.md#mamba-free-implementation);
+  no pretrained weights).
 
 ## Pretrained models
 
-| Dataset | Input | Dice (%) ↑ | HD95 (mm) ↓ | `predict.sh` key | Weights |
+| Dataset | Modality | Dice (%) ↑ | HD95 (mm) ↓ | `predict.sh` key | Weights |
 | --- | --- | ---: | ---: | --- | --- |
-| ACDC | MRI | 91.56 | 3.70 | `acdc` | [Hugging Face][hf-acdc] · [GitHub][release-acdc] |
-| AbdomenCT-1K | CT | 95.62 | 2.84 | `abdomenct1k` | [Hugging Face][hf-abdomenct1k] · [GitHub][release-abdomenct1k] |
-| AMOS2022 | CT only | 89.76 | 11.36 | `amos-ct` | [Hugging Face][hf-amos] · [GitHub][release-amos] |
+| ACDC | MRI | 91.56 | 3.70 | `acdc` | [GitHub][release-acdc] · [Hugging Face][hf-acdc] |
+| AbdomenCT-1K | CT | 95.62 | 2.84 | `abdomenct1k` | [GitHub][release-abdomenct1k] · [Hugging Face][hf-abdomenct1k] |
+| AMOS2022 | CT only | 89.76 | 11.36 | `amos-ct` | [GitHub][release-amos] · [Hugging Face][hf-amos] |
 
-Paper Table III results; the [fold-0 validation records](experiments/README.md)
-are separate measurements, not independent test-set results.
+<sub>Dice and HD95 are from Table III of the paper. The fold-0 validation results in
+the reproduction bundles are separate measurements, not independent test-set results.</sub>
+
+The [Hugging Face paper page][hf-paper-url] links all three checkpoints to the
+paper. Each model page includes its nnU-Net download and prediction instructions.
 
 ## Quick start
 
-Requires Linux, an NVIDIA GPU, Python 3.12 and CUDA Toolkit 12.6 with `nvcc`.
-Validated on GH200 and RTX 3090. See [installation](docs/INSTALLATION.md) for
-prerequisites, troubleshooting and the Mamba-free variant.
+> [!NOTE]
+> Requires Linux, an NVIDIA GPU, Python 3.12, Git, a C++ compiler and CUDA Toolkit
+> 12.6 with `nvcc`. Mamba and causal-conv1d compile from source (usually 10–20 min).
+> Validated on Linux aarch64 (NVIDIA GH200) and x86_64 (NVIDIA RTX 3090).
+
+**Install**
 
 ```bash
-git clone https://github.com/WHHHHHY822/SlimFormerPlusPlus.git
-cd SlimFormerPlusPlus
+git clone https://github.com/WHHHHHY822/SlimFormerPlusPlus.git && cd SlimFormerPlusPlus
 python3.12 -m venv .venv && source .venv/bin/activate
+
+# PyTorch and build tools first, then the compiled requirements
 python -m pip install -c tools/constraints.txt torch==2.6.0 torchvision==0.21.0 --index-url https://download.pytorch.org/whl/cu126
 python -m pip install -c tools/constraints.txt pip setuptools wheel packaging ninja
 python tools/check_environment.py --cuda
 MAX_JOBS=4 python -m pip install --no-build-isolation -r requirements.txt
 python -m pip check
+
+# Register the trainer and run a smoke test
 python tools/install.py
 python tools/smoke_test.py --cuda
 ```
 
-Predict on [prepared](docs/USAGE.md#prepare-data) `*_0000.nii.gz` volumes;
-the helper downloads and verifies the selected checkpoint:
+**Predict** — downloads and verifies the checkpoint, then runs `nnUNetv2_predict`
+on `*_0000.nii.gz` images ([data preparation](docs/USAGE.md#prepare-data)):
 
 ```bash
 export nnUNet_results=/path/to/checkpoints
-bash predict.sh acdc /path/to/imagesTs /path/to/predictions
+bash predict.sh acdc /path/to/imagesTs /path/to/predictions   # or abdomenct1k, amos-ct
 ```
 
-For [training](docs/USAGE.md#train-on-your-data), follow the usage guide.
-For evaluation and benchmarks, follow the [reproduction guide](experiments/README.md).
+**Train** — on any nnU-Net dataset; replace `2` with your dataset ID
+([environment variables](docs/USAGE.md#train-on-your-data)):
 
-## Citation and license
+```bash
+export nnUNet_compile=false
+nnUNetv2_plan_and_preprocess -d 2 --verify_dataset_integrity
+nnUNetv2_train 2 3d_fullres 0 -tr nnUNetTrainer_SlimFormerPlusPlus
+```
 
-Use the [BibTeX citation](CITATION.bib) and also cite [nnU-Net](https://github.com/MIC-DKFZ/nnUNet).
-**Noncommercial research use only**; see [LICENSE](LICENSE) and [third-party notices](NOTICE.md).
-This is a source-available research license, not an OSI-approved open-source license.
+**Reproduce** — evaluates a released checkpoint on the published validation cases
+and compares the result with the reference metrics:
 
-Built on nnU-Net, [MedNeXt](https://github.com/MIC-DKFZ/MedNeXt),
-[Mamba](https://github.com/state-spaces/mamba) and [MONAI](https://github.com/Project-MONAI/MONAI).
-We thank the dataset providers listed in the [data guide](docs/USAGE.md#prepare-data).
+```bash
+python reproduce.py acdc --images /path/to/images --labels /path/to/labels --output /path/to/evaluation
+```
+
+See [Validation](docs/VALIDATION.md) for tested environments and remaining limitations.
+
+## Citation
+
+Please cite SlimFormer++ together with [nnU-Net](https://github.com/MIC-DKFZ/nnUNet):
+
+```bibtex
+@misc{hong2026slimformertokenmixingmatters,
+      title={SlimFormer++: Token Mixing Where It Matters for Efficient 3D Medical Image Segmentation},
+      author={Yang Hong and Lei Zhang and Zhihong Liu and Jianqing Mo and Xujiong Ye},
+      year={2026},
+      eprint={2610.25488},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2610.25488},
+}
+```
+
+## License and acknowledgments
+
+**Noncommercial research use only.** This is a source-available license, not an
+OSI-approved open-source license; see [LICENSE](LICENSE) and [NOTICE.md](NOTICE.md).
+
+Built on [nnU-Net](https://github.com/MIC-DKFZ/nnUNet),
+[MedNeXt](https://github.com/MIC-DKFZ/MedNeXt),
+[Mamba](https://github.com/state-spaces/mamba) and
+[MONAI](https://github.com/Project-MONAI/MONAI). We thank the providers of
+[ACDC](https://www.creatis.insa-lyon.fr/Challenge/acdc/),
+[AbdomenCT-1K](https://github.com/JunMa11/AbdomenCT-1K) and
+[AMOS2022](https://amos22.grand-challenge.org/).
+README layout adapted from [Best-README-Template](https://github.com/othneildrew/Best-README-Template).
 
 [arxiv-url]: https://arxiv.org/abs/2610.25488
 [hf-paper-url]: https://huggingface.co/papers/2610.25488
@@ -82,6 +135,7 @@ We thank the dataset providers listed in the [data guide](docs/USAGE.md#prepare-
 [arxiv-shield]: https://img.shields.io/badge/arXiv-2610.25488-b31b1b.svg?style=flat-square
 [hf-shield]: https://img.shields.io/badge/Hugging%20Face-Paper%20%26%20Models-FFD21E.svg?style=flat-square&logo=huggingface
 [license-shield]: https://img.shields.io/badge/license-noncommercial%20research-orange.svg?style=flat-square
+[releases-url]: https://github.com/WHHHHHY822/SlimFormerPlusPlus/releases
 [release-acdc]: https://github.com/WHHHHHY822/SlimFormerPlusPlus/releases/tag/acdc-best-v1
 [release-abdomenct1k]: https://github.com/WHHHHHY822/SlimFormerPlusPlus/releases/tag/abdomenct1k-best-v1
 [release-amos]: https://github.com/WHHHHHY822/SlimFormerPlusPlus/releases/tag/amos2022-ct-best-v1
