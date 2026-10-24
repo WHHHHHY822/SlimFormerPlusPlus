@@ -7,7 +7,7 @@
 
 **Token Mixing Where It Matters for Efficient 3D Medical Image Segmentation**
 
-[Paper][arxiv-url] · [Pretrained weights][releases-url] · [Documentation](docs/README.md) · [Reproduction](experiments/README.md)
+[Paper][arxiv-url] · [Hugging Face Papers][hf-paper-url] · [Pretrained weights][releases-url] · [Documentation](docs/README.md) · [Reproduction](experiments/README.md)
 
 <img src="assets/performance_efficiency_pruning.png" alt="Mean Dice versus GFLOPs, with model parameter counts and pruning comparisons" width="53%" />
 <img src="assets/efficiency_radar.png" alt="Normalized comparison of parameters, GFLOPs, peak memory, latency and energy; outward is better" width="44%" />
@@ -35,12 +35,15 @@ keeps token mixing only in the stages where it contributes.
 
 | Dataset | Modality | Dice (%) ↑ | HD95 (mm) ↓ | `predict.sh` key | Weights |
 | --- | --- | ---: | ---: | --- | --- |
-| ACDC | MRI | 91.56 | 3.70 | `acdc` | [acdc-best-v1][release-acdc] |
-| AbdomenCT-1K | CT | 95.62 | 2.84 | `abdomenct1k` | [abdomenct1k-best-v1][release-abdomenct1k] |
-| AMOS2022 | CT only | 89.76 | 11.36 | `amos-ct` | [amos2022-ct-best-v1][release-amos] |
+| ACDC | MRI | 91.56 | 3.70 | `acdc` | [GitHub][release-acdc] · [Hugging Face][hf-acdc] |
+| AbdomenCT-1K | CT | 95.62 | 2.84 | `abdomenct1k` | [GitHub][release-abdomenct1k] · [Hugging Face][hf-abdomenct1k] |
+| AMOS2022 | CT only | 89.76 | 11.36 | `amos-ct` | [GitHub][release-amos] · [Hugging Face][hf-amos] |
 
 <sub>Dice and HD95 are from Table III of the paper. The fold-0 validation results in
 the reproduction bundles are separate measurements, not independent test-set results.</sub>
+
+The [Hugging Face paper page][hf-paper-url] links all three checkpoints to the
+paper. Each model page includes its nnU-Net download and prediction instructions.
 
 ## Quick start
 
@@ -135,6 +138,10 @@ Built on [nnU-Net](https://github.com/MIC-DKFZ/nnUNet),
 README layout adapted from [Best-README-Template](https://github.com/othneildrew/Best-README-Template).
 
 [arxiv-url]: https://arxiv.org/abs/2610.25488
+[hf-paper-url]: https://huggingface.co/papers/2610.25488
+[hf-acdc]: https://huggingface.co/Yang0822/SlimFormerPlusPlus-ACDC
+[hf-abdomenct1k]: https://huggingface.co/Yang0822/SlimFormerPlusPlus-AbdomenCT1K
+[hf-amos]: https://huggingface.co/Yang0822/SlimFormerPlusPlus-AMOS2022-CT
 [arxiv-shield]: https://img.shields.io/badge/arXiv-2610.25488-b31b1b.svg?style=flat-square
 [license-shield]: https://img.shields.io/badge/license-noncommercial%20research-orange.svg?style=flat-square
 [releases-url]: https://github.com/WHHHHHY822/SlimFormerPlusPlus/releases
