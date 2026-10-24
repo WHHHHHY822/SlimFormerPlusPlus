@@ -3,6 +3,7 @@
 # SlimFormer++
 
 [![arXiv][arxiv-shield]][arxiv-url]
+[![Hugging Face][hf-shield]][hf-paper-url]
 [![License][license-shield]](LICENSE)
 
 **Token Mixing Where It Matters for Efficient 3D Medical Image Segmentation**
@@ -143,6 +144,7 @@ README layout adapted from [Best-README-Template](https://github.com/othneildrew
 [hf-abdomenct1k]: https://huggingface.co/Yang0822/SlimFormerPlusPlus-AbdomenCT1K
 [hf-amos]: https://huggingface.co/Yang0822/SlimFormerPlusPlus-AMOS2022-CT
 [arxiv-shield]: https://img.shields.io/badge/arXiv-2610.25488-b31b1b.svg?style=flat-square
+[hf-shield]: https://img.shields.io/badge/Hugging%20Face-Paper%20%26%20Models-FFD21E.svg?style=flat-square&logo=huggingface
 [license-shield]: https://img.shields.io/badge/license-noncommercial%20research-orange.svg?style=flat-square
 [releases-url]: https://github.com/WHHHHHY822/SlimFormerPlusPlus/releases
 [release-acdc]: https://github.com/WHHHHHY822/SlimFormerPlusPlus/releases/tag/acdc-best-v1
