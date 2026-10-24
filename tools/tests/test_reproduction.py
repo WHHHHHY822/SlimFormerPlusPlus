@@ -12,7 +12,7 @@ import unittest
 from unittest.mock import patch
 
 from reproduce import (DATASETS, METRICS, ROOT, evaluate_case, file_index, find_case,
-                       load_bundle, prepare_training, summarize)
+                       load_bundle, prepare_training, summarize, training_memory_error)
 
 HAS_IMAGES = all(importlib.util.find_spec(name) is not None for name in ('numpy', 'scipy', 'SimpleITK'))
 
@@ -82,11 +82,25 @@ class PublishedExperimentTests(unittest.TestCase):
             split = {'train': ['a'], 'val': ['b']}
             with patch.dict(os.environ, environment):
                 prepare_training(folder, protocol, dataset, split, images, labels)
+                self.assertEqual((root / 'preprocessed' / protocol['dataset'] / 'dataset.json').read_bytes(),
+                                 (folder / 'dataset.json').read_bytes())
                 destination = root / 'preprocessed' / protocol['dataset'] / 'splits_final.json'
                 destination.write_text('another experiment')
                 with self.assertRaises(FileExistsError):
                     prepare_training(folder, protocol, dataset, split, images, labels)
                 self.assertEqual(destination.read_text(), 'another experiment')
+
+    def test_training_memory_check_matches_24gb_limits(self):
+        gib = 23.57  # RTX 3090, as reported by PyTorch
+        # Measured on 24 GB: per-GPU batch 4 fits ACDC and AbdomenCT-1K, 2 fits AMOS; the next valid batch does not.
+        self.assertIn('--gpus 2', training_memory_error('acdc', 8, 1, gib))
+        self.assertIsNone(training_memory_error('acdc', 8, 2, gib))
+        self.assertIn('--gpus 2', training_memory_error('abdomenct1k', 8, 1, gib))
+        self.assertIsNone(training_memory_error('abdomenct1k', 8, 2, gib))
+        self.assertIn('--gpus 4', training_memory_error('amos-ct', 8, 2, gib))
+        self.assertIsNone(training_memory_error('amos-ct', 8, 4, gib))
+        self.assertIsNone(training_memory_error('acdc', 8, 1, 94.5))
+        self.assertIn('more memory', training_memory_error('amos-ct', 8, 8, 6.0))
 
 
 @unittest.skipUnless(HAS_IMAGES, 'Requires numpy, scipy and SimpleITK')

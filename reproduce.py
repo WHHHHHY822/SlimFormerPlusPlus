@@ -17,6 +17,10 @@ import tempfile
 ROOT = Path(__file__).resolve().parent
 DATASETS = ('acdc', 'abdomenct1k', 'amos-ct')
 METRICS = ('Dice', 'IoU', 'HD95_mm', 'ASD_mm')
+# Training memory per sample on one GPU (GiB): peak reserved at per-GPU batch 1,
+# FP16 autocast, RTX 3090. The overhead covers the CUDA context and loss.
+TRAINING_GIB_PER_SAMPLE = {'acdc': 3.9, 'abdomenct1k': 5.0, 'amos-ct': 6.4}
+TRAINING_OVERHEAD_GIB = 1.0
 
 
 def load_bundle(name):
@@ -173,8 +177,10 @@ def prepare_training(folder, protocol, dataset, split, images, labels):
     inputs = file_index(images)
     references = file_index(labels)
     files = [(case, find_case(inputs, case), find_case(references, case, label=True)) for case in cases]
-    # Validate all metadata conflicts before adding any links.
+    # Validate all metadata conflicts before adding any links. nnUNetv2_preprocess
+    # reads dataset.json from the preprocessed folder, where planning would put it.
     copies = [(folder / 'dataset.json', raw / 'dataset.json'),
+              (folder / 'dataset.json', preprocessed / 'dataset.json'),
               (folder / 'plans.json', preprocessed / 'nnUNetPlans.json'),
               (folder / 'splits_final.json', preprocessed / 'splits_final.json')]
     for source, destination in copies:
@@ -198,6 +204,20 @@ def prepare_training(folder, protocol, dataset, split, images, labels):
         destination.parent.mkdir(parents=True, exist_ok=True)
         if not destination.is_symlink() and not destination.exists():
             destination.symlink_to(source)
+
+
+def training_memory_error(alias, global_batch, gpus, gpu_gib):
+    """Return advice if the per-GPU batch will not fit, otherwise None."""
+    def needed(count):
+        return global_batch // count * TRAINING_GIB_PER_SAMPLE[alias] + TRAINING_OVERHEAD_GIB
+
+    if needed(gpus) <= gpu_gib:
+        return None
+    options = [count for count in range(gpus + 1, global_batch + 1)
+               if not global_batch % count and needed(count) <= gpu_gib]
+    advice = f'Use --gpus {options[0]} or more.' if options else 'Use GPUs with more memory.'
+    return (f'Per-GPU batch {global_batch // gpus} needs about {needed(gpus):.0f} GiB; '
+            f'the smallest selected GPU has {gpu_gib:.1f} GiB. {advice}')
 
 
 def verify_cached_checkpoint(protocol):
@@ -237,9 +257,21 @@ def main():
     if args.train:
         if protocol['training']['global_batch'] % args.gpus:
             parser.error('The reference global batch must divide evenly across GPUs')
+        import torch
+
+        if torch.cuda.device_count() < args.gpus:
+            parser.error(f'--gpus {args.gpus} needs {args.gpus} visible CUDA GPUs; found {torch.cuda.device_count()}')
+        gpu_gib = min(torch.cuda.get_device_properties(i).total_memory for i in range(args.gpus)) / 2**30
+        message = training_memory_error(args.dataset, protocol['training']['global_batch'], args.gpus, gpu_gib)
+        if message:
+            parser.error(message)
         prepare_training(folder, protocol, dataset, split, args.images, args.labels)
         environment = dict(os.environ, nnUNet_compile='false',
                            SLIMFORMER_GLOBAL_BATCH=str(protocol['training']['global_batch']))
+        # The trainer copies dataset_fingerprint.json into its output; preprocessing
+        # uses the published plans, so extraction does not change the data.
+        subprocess.run(['nnUNetv2_extract_fingerprint', '-d', str(protocol['dataset_id'])],
+                       check=True, env=environment)
         subprocess.run(['nnUNetv2_preprocess', '-d', str(protocol['dataset_id']), '-c', '3d_fullres'],
                        check=True, env=environment)
         subprocess.run(['nnUNetv2_train', str(protocol['dataset_id']), '3d_fullres', '0',
